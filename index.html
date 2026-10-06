@@ -69,7 +69,7 @@ function draw(){
   for(const p of PINS) drawPin(p, p.type==='home'?'#ffd54a':(ICON[p.type]||'#ff5252'));
   if(tap) drawPin(tap,'#4fc3f7',true);
 }
-const ICON={village:'#c58f3a',portal:'#b064f0',stronghold:'#8ad',cave:'#9e9e9e',outpost:'#ff8a00',mansion:'#d32f2f',ruins:'#dcc67a',temple:'#dcc67a',monument:'#4ad',spawner:'#e66',mine:'#4fe3ff',loot:'#ffd700',danger:'#f22',cliff:'#e6c47a',mountain:'#bdbdbd',mob:'#8bc34a',landmark:'#ffffff'};
+const ICON={village:'#c58f3a',portal:'#b064f0',stronghold:'#8ad',cave:'#9e9e9e',outpost:'#ff8a00',mansion:'#d32f2f',ruins:'#dcc67a',temple:'#dcc67a',monument:'#4ad',spawner:'#e66',mine:'#4fe3ff',loot:'#ffd700',danger:'#f22',cliff:'#e6c47a',mountain:'#bdbdbd',mob:'#8bc34a',landmark:'#ffffff',biome:'#7ccf7c'};
 function drawPin(p,color,ring){
   const [sx,sz]=b2s(p.x,p.z);
   ctx.beginPath();ctx.arc(sx,sz,ring?6:7,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#000';ctx.stroke();

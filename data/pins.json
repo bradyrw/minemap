@@ -94,5 +94,109 @@
   "y": 64,
   "z": 187,
   "notes": "Tall cobbled-deepslate spike on a hill — looks like a marker someone placed. Unknown what it marks; worth poking around."
+ },
+ {
+  "name": "Ocean Monument",
+  "type": "monument",
+  "x": -689,
+  "y": 56,
+  "z": -794,
+  "notes": "Prismarine monument with sea lanterns. Guardians inside — bring water breathing / a conduit plan."
+ },
+ {
+  "name": "Ocean Ruins",
+  "type": "ruins",
+  "x": -1211,
+  "y": 54,
+  "z": -623,
+  "notes": "Stone-brick underwater ruins in a kelp forest. Chests with treasure maps, drowned around."
+ },
+ {
+  "name": "Shipwreck",
+  "type": "loot",
+  "x": -4141,
+  "y": 63,
+  "z": -904,
+  "notes": "Beached shipwreck on the sand. Check all three chest spots (bow, stern, hold)."
+ },
+ {
+  "name": "Woodland tent (2nd)",
+  "type": "loot",
+  "x": -333,
+  "y": 75,
+  "z": -422,
+  "notes": "Second woodland tent: white canopy, birch posts, chest, pink flowers. Explorer map in hand here."
+ },
+ {
+  "name": "Big cave mouth",
+  "type": "cave",
+  "x": -406,
+  "y": 62,
+  "z": -471,
+  "notes": "Tall deepslate cave entrance opening right onto the water."
+ },
+ {
+  "name": "Dug hole / stone pit",
+  "type": "mine",
+  "x": -517,
+  "y": 60,
+  "z": -229,
+  "notes": "Hole in the hillside with exposed stone and an orange block at the bottom. (Brady to confirm.)"
+ },
+ {
+  "name": "Mountain-top quarry",
+  "type": "landmark",
+  "x": -1891,
+  "y": 117,
+  "z": -607,
+  "notes": "Cleared stone area on a mountain top with a long log beam. (Brady to confirm — yours?)"
+ },
+ {
+  "name": "Longhorn cows in a pen",
+  "type": "mob",
+  "x": -3730,
+  "y": 66,
+  "z": -327,
+  "notes": "Fenced pen with longhorn cows and a pig, composter nearby — looks like a village farm."
+ },
+ {
+  "name": "Llamas + snowy peaks",
+  "type": "mob",
+  "x": -1728,
+  "y": 92,
+  "z": -599,
+  "notes": "Llamas on the grass below snowy peaks, cherry trees nearby."
+ },
+ {
+  "name": "Swamp",
+  "type": "biome",
+  "x": -311,
+  "y": 63,
+  "z": -91,
+  "notes": "Swamp biome: lily pads, slime chance at night, mangrove-ish trees."
+ },
+ {
+  "name": "Autumn forest",
+  "type": "biome",
+  "x": -3470,
+  "y": 78,
+  "z": -1050,
+  "notes": "Red/orange autumn forest across the water."
+ },
+ {
+  "name": "Giant mushrooms",
+  "type": "biome",
+  "x": -881,
+  "y": 63,
+  "z": -99,
+  "notes": "Huge red mushrooms in the forest — mushroom blocks / mushrooms for stew."
+ },
+ {
+  "name": "Bamboo jungle edge",
+  "type": "biome",
+  "x": -878,
+  "y": 63,
+  "z": -176,
+  "notes": "Jungle with bamboo and birch at the edge."
  }
 ]
