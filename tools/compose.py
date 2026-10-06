@@ -20,9 +20,13 @@ for n,(fx,fy) in l3.items():
     else: m[200:]=False
     put(up,fx*128,fy*128,m)
 l2=json.load(open('assign.json')); l2.update({'9475':(7,1),'9476':(4,2)})
+def hudmask(t):
+    m=np.zeros((128,128),bool); m[0:9,36:92]=True; m[121:128,52:78]=True; m[127:128,:]=True; m[61:68,61:68]=True
+    hsv=cv2.cvtColor(t,cv2.COLOR_BGR2HSV); gray=(hsv[...,1]<40)&(hsv[...,2]>60)&(hsv[...,2]<200); m[:12]|=gray[:12]
+    return m
 for n,(fx,fy) in l2.items():
-    t=cv2.imread(f'clean_IMG_{n}.png')
-    put(t,fx*128,fy*128)
+    t=cv2.imread(f'rect_IMG_{n}.png')
+    put(t,fx*128,fy*128,~hudmask(t))
 cv2.imwrite('world.png',canvas)
 json.dump({'x0':X0,'z0':Z0,'blocks_per_px':4,'w':W,'h':H,'level2':l2,'level3':l3},open('world.json','w'),indent=1)
 print('explored px',int((canvas[...,3]>0).sum()))
