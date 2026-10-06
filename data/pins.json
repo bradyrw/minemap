@@ -136,20 +136,12 @@
   "notes": "Tall deepslate cave entrance opening right onto the water."
  },
  {
-  "name": "Dug hole / stone pit",
-  "type": "mine",
-  "x": -517,
-  "y": 60,
-  "z": -229,
-  "notes": "Hole in the hillside with exposed stone and an orange block at the bottom. (Brady to confirm.)"
- },
- {
-  "name": "Mountain-top quarry",
+  "name": "Mountain bridge",
   "type": "landmark",
   "x": -1891,
   "y": 117,
   "z": -607,
-  "notes": "Cleared stone area on a mountain top with a long log beam. (Brady to confirm — yours?)"
+  "notes": "Simple log bridge spanning two mountain tops."
  },
  {
   "name": "Longhorn cows in a pen",
