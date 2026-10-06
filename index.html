@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1b1b1b">
+<title>minemap</title>
+<style>
+:root{--bg:#1b1b1b;--panel:#2a2a2ae6;--fg:#eee;--accent:#ffd54a;--muted:#999;box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,sans-serif;overflow:hidden;overscroll-behavior:none}
+#map{position:fixed;inset:0;touch-action:none;cursor:grab;background:var(--bg)}
+canvas{display:block;image-rendering:pixelated}
+#hud{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);display:flex;gap:6px;padding:8px;pointer-events:none}
+#hud>*{pointer-events:auto}
+.pill{background:var(--panel);backdrop-filter:blur(8px);border-radius:999px;padding:8px 12px;font-size:14px;border:0;color:var(--fg)}
+button.pill{cursor:pointer}
+button.pill.on{background:var(--accent);color:#000}
+#coords{flex:1;text-align:center;font-variant-numeric:tabular-nums}
+#sheet{position:fixed;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));background:var(--panel);backdrop-filter:blur(8px);border-radius:14px;padding:12px 14px;font-size:14px;display:none;max-height:45vh;overflow:auto}
+#sheet h3{margin:0 0 4px;font-size:16px}
+#sheet .m{color:var(--muted)}
+#sheet .row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+#sheet input{flex:1;min-width:0;background:#111;color:var(--fg);border:1px solid #444;border-radius:8px;padding:8px;font-size:16px}
+#pins{list-style:none;margin:8px 0 0;padding:0}
+#pins li{padding:8px 0;border-top:1px solid #444;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
+#pins li span.m{white-space:nowrap}
+.close{position:absolute;right:10px;top:8px;background:none;border:0;color:var(--muted);font-size:20px}
+</style>
+</head>
+<body>
+<div id="map"><canvas id="c"></canvas></div>
+<div id="hud">
+  <button class="pill" id="btnPins">Pins</button>
+  <div class="pill" id="coords">tap the map</div>
+  <button class="pill" id="btnHome" title="Center on Home">⌂</button>
+  <button class="pill" id="btnGrid">Grid</button>
+</div>
+<div id="sheet"><button class="close" id="btnClose">×</button><div id="sheetBody"></div></div>
+<script type="module">
+const WORLD = {"x0": -4160, "z0": -1088, "blocks_per_px": 4, "w": 1024, "h": 512};      // {x0,z0,blocks_per_px,w,h}
+const PINS  = await (await fetch("data/pins.json?"+Date.now())).json();       // [{name,type,x,z,notes}]
+const IMG_SRC = "img/world.png?"+Date.now();
+const HOME = PINS.find(p=>p.type==='home') || {x:-2428,z:-449,name:'Home'};
+
+const cv=document.getElementById('c'), ctx=cv.getContext('2d');
+const img=new Image(); img.src=IMG_SRC;
+let dpr=window.devicePixelRatio||1;
+// view: scale = screen px per block; cx,cz = world block coords at screen center
+let scale=0.5, cx=HOME.x, cz=HOME.z, showGrid=false, tap=null;
+
+function resize(){dpr=window.devicePixelRatio||1;cv.width=innerWidth*dpr;cv.height=innerHeight*dpr;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';draw();}
+addEventListener('resize',resize);
+const b2s=(x,z)=>[(x-cx)*scale+innerWidth/2,(z-cz)*scale+innerHeight/2];
+const s2b=(sx,sz)=>[(sx-innerWidth/2)/scale+cx,(sz-innerHeight/2)/scale+cz];
+function draw(){
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.fillStyle='#1b1b1b'; ctx.fillRect(0,0,innerWidth,innerHeight);
+  ctx.imageSmoothingEnabled = scale*WORLD.blocks_per_px < 1;
+  const [ox,oz]=b2s(WORLD.x0,WORLD.z0); const s=WORLD.blocks_per_px*scale;
+  if(img.complete&&img.naturalWidth) ctx.drawImage(img,ox,oz,WORLD.w*s,WORLD.h*s);
+  if(showGrid){ctx.strokeStyle='rgba(255,255,255,.25)';ctx.lineWidth=1;ctx.font='11px system-ui';ctx.fillStyle='rgba(255,255,255,.6)';
+    const step=512, gx0=Math.floor(WORLD.x0/step)*step;
+    for(let x=gx0;x<=WORLD.x0+WORLD.w*WORLD.blocks_per_px;x+=step){const [sx]=b2s(x,0);ctx.beginPath();ctx.moveTo(sx,0);ctx.lineTo(sx,innerHeight);ctx.stroke();ctx.fillText(x,sx+3,innerHeight-30);}
+    const gz0=Math.floor(WORLD.z0/step)*step;
+    for(let z=gz0;z<=WORLD.z0+WORLD.h*WORLD.blocks_per_px;z+=step){const [,sz]=b2s(0,z);ctx.beginPath();ctx.moveTo(0,sz);ctx.lineTo(innerWidth,sz);ctx.stroke();ctx.fillText(z,4,sz-3);}
+  }
+  for(const p of PINS) drawPin(p, p.type==='home'?'#ffd54a':(ICON[p.type]||'#ff5252'));
+  if(tap) drawPin(tap,'#4fc3f7',true);
+}
+const ICON={village:'#c58f3a',portal:'#b064f0',stronghold:'#8ad',cave:'#aaa',outpost:'#f80',monument:'#4ad',temple:'#dc8',spawner:'#e66',mine:'#ccc',loot:'#fd0',danger:'#f22'};
+function drawPin(p,color,ring){
+  const [sx,sz]=b2s(p.x,p.z);
+  ctx.beginPath();ctx.arc(sx,sz,ring?6:7,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#000';ctx.stroke();
+  if(p.name&&scale>0.35){ctx.font='bold 12px system-ui';ctx.lineWidth=3;ctx.strokeStyle='#000';ctx.strokeText(p.name,sx+10,sz+4);ctx.fillStyle='#fff';ctx.fillText(p.name,sx+10,sz+4);}
+}
+function fromHome(x,z){
+  const dx=x-HOME.x, dz=z-HOME.z, d=Math.round(Math.hypot(dx,dz));
+  const dirs=['N','NE','E','SE','S','SW','W','NW']; const ang=Math.atan2(dx,-dz); // 0 = north
+  const dir=dirs[Math.round(((ang/(Math.PI*2))*8+8))%8];
+  return d<5?'at Home':`${d} blocks ${dir} of Home`;
+}
+// ---- input ----
+const pts=new Map(); let last=null, pinchD=0, moved=false, downT=0;
+cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.clientX,e.clientY]);moved=false;downT=Date.now();
+  if(pts.size===2){const [a,b]=[...pts.values()];pinchD=Math.hypot(a[0]-b[0],a[1]-b[1]);}});
+cv.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;const prev=pts.get(e.pointerId);pts.set(e.pointerId,[e.clientX,e.clientY]);
+  if(pts.size===1){const dx=e.clientX-prev[0],dz=e.clientY-prev[1];if(Math.abs(dx)+Math.abs(dz)>2)moved=true;cx-=dx/scale;cz-=dz/scale;draw();}
+  else if(pts.size===2){moved=true;const [a,b]=[...pts.values()];const d=Math.hypot(a[0]-b[0],a[1]-b[1]);const mx=(a[0]+b[0])/2,mz=(a[1]+b[1])/2;zoomAt(mx,mz,d/pinchD);pinchD=d;}});
+function up(e){pts.delete(e.pointerId);if(pts.size===0&&!moved&&Date.now()-downT<400){onTap(e.clientX,e.clientY);}}
+cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+cv.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.clientX,e.clientY,Math.exp(-e.deltaY*0.002));},{passive:false});
+function zoomAt(sx,sz,f){const [bx,bz]=s2b(sx,sz);scale=Math.min(8,Math.max(0.05,scale*f));const [nx,nz]=s2b(sx,sz);cx+=bx-nx;cz+=bz-nz;draw();}
+function onTap(sx,sz){
+  // hit a pin?
+  for(const p of PINS){const [px,pz]=b2s(p.x,p.z);if(Math.hypot(px-sx,pz-sz)<16){showPin(p);return;}}
+  const [bx,bz]=s2b(sx,sz); tap={x:Math.round(bx),z:Math.round(bz)};
+  document.getElementById('coords').textContent=`X ${tap.x}  Z ${tap.z} · ${fromHome(tap.x,tap.z)}`; draw();
+}
+// ---- sheet ----
+const sheet=document.getElementById('sheet'), body=document.getElementById('sheetBody');
+function open(html){body.innerHTML=html;sheet.style.display='block';}
+document.getElementById('btnClose').onclick=()=>sheet.style.display='none';
+function showPin(p){open(`<h3>${p.name}</h3><div class="m">${p.type||''} · X ${p.x}, Z ${p.z}${p.y!=null?', Y '+p.y:''}<br>${fromHome(p.x,p.z)}</div>${p.notes?`<p>${p.notes}</p>`:''}`);cx=p.x;cz=p.z;draw();}
+document.getElementById('btnPins').onclick=()=>{
+  const items=PINS.map((p,i)=>`<li data-i="${i}"><span>${p.name}</span><span class="m">${fromHome(p.x,p.z)}</span></li>`).join('');
+  open(`<h3>Go to</h3><div class="row"><input id="gx" inputmode="numeric" placeholder="X"><input id="gz" inputmode="numeric" placeholder="Z"><button class="pill" id="go">Go</button></div><ul id="pins">${items}</ul>`);
+  document.getElementById('go').onclick=()=>{const x=+gx.value,z=+gz.value;if(isNaN(x)||isNaN(z))return;tap={x,z};cx=x;cz=z;document.getElementById('coords').textContent=`X ${x}  Z ${z} · ${fromHome(x,z)}`;sheet.style.display='none';draw();};
+  body.querySelectorAll('#pins li').forEach(li=>li.onclick=()=>showPin(PINS[+li.dataset.i]));
+};
+document.getElementById('btnHome').onclick=()=>{cx=HOME.x;cz=HOME.z;draw();};
+document.getElementById('btnGrid').onclick=e=>{showGrid=!showGrid;e.target.classList.toggle('on',showGrid);draw();};
+img.onload=draw; resize();
+</script>
+</body>
+</html>
