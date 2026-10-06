@@ -190,5 +190,69 @@
   "y": 63,
   "z": -176,
   "notes": "Jungle with bamboo and birch at the edge."
+ },
+ {
+  "name": "Shipwreck (beach)",
+  "type": "loot",
+  "x": -1119,
+  "y": 70,
+  "z": 40,
+  "notes": "Second shipwreck, beached on the sand by birch forest."
+ },
+ {
+  "name": "Taiga village + outpost",
+  "type": "village",
+  "x": -843,
+  "y": 68,
+  "z": 670,
+  "notes": "Taiga/spruce village (berries, pumpkins, barrels) with a pillager outpost right next to it at (-855, 673) and a woodland tent at (-845, 672). Explorer map in hand here. Street view from (-829, 733)."
+ },
+ {
+  "name": "Snowy village",
+  "type": "village",
+  "x": -143,
+  "y": 63,
+  "z": 693,
+  "notes": "Snowy taiga village by the frozen water."
+ },
+ {
+  "name": "Igloo",
+  "type": "loot",
+  "x": -306,
+  "y": 61,
+  "z": 724,
+  "notes": "Igloo — bed, crafting table, furnace. Check under the carpet for the basement ladder."
+ },
+ {
+  "name": "Woodland tent (3rd)",
+  "type": "loot",
+  "x": -398,
+  "y": 64,
+  "z": 402,
+  "notes": "Another woodland tent (white canopy, hay, blue flowers) beside a giant red mushroom."
+ },
+ {
+  "name": "Sulfur springs (3rd)",
+  "type": "ruins",
+  "x": -291,
+  "y": 76,
+  "z": 198,
+  "notes": "Sulfur mounds on red/terracotta ground in the forest."
+ },
+ {
+  "name": "Sulfur springs (4th)",
+  "type": "ruins",
+  "x": -111,
+  "y": 78,
+  "z": 92,
+  "notes": "Larger sulfur springs with a water pool, near the flower field."
+ },
+ {
+  "name": "Swamp + giant brown mushroom",
+  "type": "biome",
+  "x": -227,
+  "y": 62,
+  "z": 368,
+  "notes": "Swamp with a huge brown mushroom at the edge."
  }
 ]
