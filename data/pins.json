@@ -256,12 +256,12 @@
   "notes": "Swamp with a huge brown mushroom at the edge."
  },
  {
-  "name": "Cliff base — 'Watch them zoom by!'",
-  "type": "landmark",
+  "name": "Skeleton spawner XP farm",
+  "type": "spawner",
   "x": -3113,
   "y": 72,
   "z": -758,
-  "notes": "Built room in a cliff over the water: beds, chests, crafting table, furnaces, glass cases, sign reading 'Watch them zoom by!'. Stocked stopover base."
+  "notes": "Skeleton spawner XP farm built into the cliff over the water: beds, chests, crafting table, furnaces, glass cases. Sign reads 'Watch them zoom by!'. Bones, arrows and XP."
  },
  {
   "name": "Parrots + ocelots",
