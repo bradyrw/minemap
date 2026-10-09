@@ -270,5 +270,29 @@
   "y": 73,
   "z": 895,
   "notes": "Bamboo jungle with parrots (seeds to tame) and ocelots (raw cod/salmon to trust). Also bamboo."
+ },
+ {
+  "name": "Plains village",
+  "type": "village",
+  "x": -2016,
+  "y": 64,
+  "z": 810,
+  "notes": "Plains village with villagers, farms, bell — mountains behind. Closest village to Home (~1,300 blocks S)."
+ },
+ {
+  "name": "Pillager outpost (lake)",
+  "type": "outpost",
+  "x": -1720,
+  "y": 63,
+  "z": 443,
+  "notes": "Outpost tower standing in the water. Pillagers with crossbows on the ground."
+ },
+ {
+  "name": "Slime chunk next to Home",
+  "type": "mine",
+  "x": -2440,
+  "y": 30,
+  "z": -456,
+  "notes": "Computed Bedrock slime chunk (x -2448…-2433, z -464…-449) right beside Home. Dig a dark room below y=40 here for slimeballs — any light level works in slime chunks. Verify in game. Toggle 'Slime' on the map to see others."
  }
 ]

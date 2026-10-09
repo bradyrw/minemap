@@ -8,7 +8,11 @@ Brady's annotated Minecraft (Bedrock, iPhone) world map. Static site on GitHub P
 - `data/world.json` — world image placement (`x0`,`z0`, blocks per px) and which screenshot sits in which frame.
 - `data/pins.json` — points of interest: `{name,type,x,y,z,notes}`. Types: home, village, portal, stronghold, cave, outpost, mansion, ruins, temple, monument, spawner, mine, loot, danger, cliff, mountain, mob, landmark, biome.
 - `img/tiles/` — cleaned 128×128 map tiles cropped from screenshots.
-- `tools/` — crop.py (find the map in a screenshot), sift.py (locate a tile on the map-wall photo), compose.py (assemble world.png).
+- `tools/` — run from repo root:
+  - `place.py <wall_photo> <tile_screenshot>...` — rectifies tiles into `img/tiles/rect_IMG_<n>.png` and prints each one's grid (fx,fy) by matching against known tiles in a photo of the map wall. Add results to `data/assign.json`.
+  - `compose.py` — assembles `img/world.png` from `img/tiles/` + `data/assign.json` + `data/world.json` (level-3 list).
+  - `crop.py`, `rectify.py` — helpers (border detection, perspective-rectify to 128×128). `sift.py`, `refine.py` — older one-offs.
+- Viewer toggles: Grid (512-block map frames), Slime (Bedrock slime chunks — seed-independent, computed in JS: `seed=(chunkX*0x1f1f1f1f)^chunkZ`, MT19937 first output % 10 == 0).
 
 ## Coordinate facts (Bedrock, verified)
 - Maps are grid-aligned: a map of size S (128·2^level) covers `S·k − 64 … S·k + S − 65` on both axes.

@@ -37,6 +37,7 @@ button.pill.on{background:var(--accent);color:#000}
   <div class="pill" id="coords">tap the map</div>
   <button class="pill" id="btnHome" title="Center on Home">⌂</button>
   <button class="pill" id="btnGrid">Grid</button>
+  <button class="pill" id="btnSlime" title="Bedrock slime chunks (seed-independent)">Slime</button>
 </div>
 <div id="sheet"><button class="close" id="btnClose">×</button><div id="sheetBody"></div></div>
 <script type="module">
@@ -49,7 +50,7 @@ const cv=document.getElementById('c'), ctx=cv.getContext('2d');
 const img=new Image(); img.src=IMG_SRC;
 let dpr=window.devicePixelRatio||1;
 // view: scale = screen px per block; cx,cz = world block coords at screen center
-let scale=0.5, cx=HOME.x, cz=HOME.z, showGrid=false, tap=null;
+let scale=0.5, cx=HOME.x, cz=HOME.z, showGrid=false, showSlime=false, tap=null;
 
 function resize(){dpr=window.devicePixelRatio||1;cv.width=innerWidth*dpr;cv.height=innerHeight*dpr;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';draw();}
 addEventListener('resize',resize);
@@ -60,6 +61,17 @@ function draw(){
   ctx.imageSmoothingEnabled = scale*WORLD.blocks_per_px < 1;
   const [ox,oz]=b2s(WORLD.x0,WORLD.z0); const s=WORLD.blocks_per_px*scale;
   if(img.complete&&img.naturalWidth) ctx.drawImage(img,ox,oz,WORLD.w*s,WORLD.h*s);
+  if(showSlime){
+    if(scale<0.25){ctx.font='12px system-ui';ctx.fillStyle='#8f8';ctx.fillText('zoom in to see slime chunks',12,innerHeight-44);}
+    else{
+      const [x0,z0]=s2b(0,0),[x1,z1]=s2b(innerWidth,innerHeight);
+      ctx.fillStyle='rgba(80,255,80,.33)';ctx.strokeStyle='rgba(40,200,40,.8)';ctx.lineWidth=1;
+      for(let cxk=Math.floor(x0/16);cxk<=Math.floor(x1/16);cxk++)for(let czk=Math.floor(z0/16);czk<=Math.floor(z1/16);czk++){
+        if(!isSlime(cxk,czk))continue;
+        const [sx,sz]=b2s(cxk*16,czk*16);ctx.fillRect(sx,sz,16*scale,16*scale);ctx.strokeRect(sx,sz,16*scale,16*scale);
+      }
+    }
+  }
   if(showGrid){ctx.strokeStyle='rgba(255,255,255,.25)';ctx.lineWidth=1;ctx.font='11px system-ui';ctx.fillStyle='rgba(255,255,255,.6)';
     const step=512, gx0=Math.floor(WORLD.x0/step)*step;
     for(let x=gx0;x<=WORLD.x0+WORLD.w*WORLD.blocks_per_px;x+=step){const [sx]=b2s(x,0);ctx.beginPath();ctx.moveTo(sx,0);ctx.lineTo(sx,innerHeight);ctx.stroke();ctx.fillText(x,sx+3,innerHeight-30);}
@@ -69,6 +81,16 @@ function draw(){
   for(const p of PINS) drawPin(p, p.type==='home'?'#ffd54a':(ICON[p.type]||'#ff5252'));
   if(tap) drawPin(tap,'#4fc3f7',true);
 }
+// Bedrock slime chunks: seed-independent. seed=(chunkX*0x1f1f1f1f)^chunkZ as uint32, MT19937 first output % 10 == 0.
+const slimeCache=new Map();
+function mtFirst(seed){
+  const mt=new Uint32Array(624); mt[0]=seed>>>0;
+  for(let i=1;i<624;i++){const p=mt[i-1]^(mt[i-1]>>>30); mt[i]=(Math.imul(1812433253,p)+i)>>>0;}
+  const y0=(mt[0]&0x80000000)|(mt[1]&0x7fffffff);
+  let y=(mt[397]^(y0>>>1)^((y0&1)?0x9908b0df:0))>>>0;
+  y^=y>>>11; y^=(y<<7)&0x9d2c5680; y^=(y<<15)&0xefc60000; y^=y>>>18; return y>>>0;
+}
+function isSlime(cx,cz){const k=cx+','+cz;let v=slimeCache.get(k);if(v===undefined){v=mtFirst((Math.imul(cx,0x1f1f1f1f)^cz)>>>0)%10===0;slimeCache.set(k,v);}return v;}
 const ICON={village:'#c58f3a',portal:'#b064f0',stronghold:'#8ad',cave:'#9e9e9e',outpost:'#ff8a00',mansion:'#d32f2f',ruins:'#dcc67a',temple:'#dcc67a',monument:'#4ad',spawner:'#e66',mine:'#4fe3ff',loot:'#ffd700',danger:'#f22',cliff:'#e6c47a',mountain:'#bdbdbd',mob:'#8bc34a',landmark:'#ffffff',biome:'#7ccf7c'};
 function drawPin(p,color,ring){
   const [sx,sz]=b2s(p.x,p.z);
@@ -96,7 +118,7 @@ function onTap(sx,sz){
   // hit a pin?
   for(const p of PINS){const [px,pz]=b2s(p.x,p.z);if(Math.hypot(px-sx,pz-sz)<16){showPin(p);return;}}
   const [bx,bz]=s2b(sx,sz); tap={x:Math.round(bx),z:Math.round(bz)};
-  document.getElementById('coords').textContent=`X ${tap.x}  Z ${tap.z} · ${fromHome(tap.x,tap.z)}`; draw();
+  document.getElementById('coords').textContent=`X ${tap.x}  Z ${tap.z} · ${fromHome(tap.x,tap.z)}`+(isSlime(Math.floor(tap.x/16),Math.floor(tap.z/16))?' · slime chunk':''); draw();
 }
 // ---- sheet ----
 const sheet=document.getElementById('sheet'), body=document.getElementById('sheetBody');
@@ -111,6 +133,7 @@ document.getElementById('btnPins').onclick=()=>{
 };
 document.getElementById('btnHome').onclick=()=>{cx=HOME.x;cz=HOME.z;draw();};
 document.getElementById('btnGrid').onclick=e=>{showGrid=!showGrid;e.target.classList.toggle('on',showGrid);draw();};
+document.getElementById('btnSlime').onclick=e=>{showSlime=!showSlime;e.target.classList.toggle('on',showSlime);draw();};
 img.onload=draw; resize();
 </script>
 </body>
