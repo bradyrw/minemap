@@ -27,6 +27,10 @@ button.pill.on{background:var(--accent);color:#000}
 #pins{list-style:none;margin:8px 0 0;padding:0}
 #pins li{padding:8px 0;border-top:1px solid #444;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
 #pins li span.m{white-space:nowrap}
+#hud{flex-wrap:wrap}
+#key{position:fixed;right:8px;top:calc(96px + env(safe-area-inset-top,0px));background:var(--panel);backdrop-filter:blur(8px);border-radius:12px;padding:8px 10px;font-size:12px;display:none;max-height:50vh;overflow:auto}
+#key div{display:flex;align-items:center;gap:6px;padding:2px 0}
+#key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid #0008}
 .close{position:absolute;right:10px;top:8px;background:none;border:0;color:var(--muted);font-size:20px}
 </style>
 </head>
@@ -34,23 +38,28 @@ button.pill.on{background:var(--accent);color:#000}
 <div id="map"><canvas id="c"></canvas></div>
 <div id="hud">
   <button class="pill" id="btnPins">Pins</button>
-  <div class="pill" id="coords">tap the map</div>
+  <div class="pill" id="coords">tap map</div>
   <button class="pill" id="btnHome" title="Center on Home">⌂</button>
   <button class="pill" id="btnGrid">Grid</button>
   <button class="pill" id="btnSlime" title="Bedrock slime chunks (seed-independent)">Slime</button>
+  <button class="pill" id="btnBiomes" title="Best-guess biomes from map colours">Biomes</button>
 </div>
+<div id="key"></div>
 <div id="sheet"><button class="close" id="btnClose">×</button><div id="sheetBody"></div></div>
 <script type="module">
 const WORLD = {"x0": -4160, "z0": -1088, "blocks_per_px": 4, "w": 1024, "h": 512};      // {x0,z0,blocks_per_px,w,h}
 const PINS  = await (await fetch("data/pins.json?"+Date.now())).json();       // [{name,type,x,z,notes}]
 const IMG_SRC = "img/world.png?"+Date.now();
+const BIOMES = await (await fetch("data/biomes.json?"+Date.now())).json();
+const bimg=new Image(); bimg.src="img/biomes.png?"+Date.now(); let bdata=null;
+bimg.onload=()=>{const oc=document.createElement('canvas');oc.width=bimg.naturalWidth;oc.height=bimg.naturalHeight;const o=oc.getContext('2d');o.drawImage(bimg,0,0);bdata=o.getImageData(0,0,oc.width,oc.height);draw();};
 const HOME = PINS.find(p=>p.type==='home') || {x:-2428,z:-449,name:'Home'};
 
 const cv=document.getElementById('c'), ctx=cv.getContext('2d');
 const img=new Image(); img.src=IMG_SRC;
 let dpr=window.devicePixelRatio||1;
 // view: scale = screen px per block; cx,cz = world block coords at screen center
-let scale=0.5, cx=HOME.x, cz=HOME.z, showGrid=false, showSlime=false, tap=null;
+let scale=0.5, cx=HOME.x, cz=HOME.z, showGrid=false, showSlime=false, showBiomes=false, tap=null;
 
 function resize(){dpr=window.devicePixelRatio||1;cv.width=innerWidth*dpr;cv.height=innerHeight*dpr;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';draw();}
 addEventListener('resize',resize);
@@ -61,6 +70,7 @@ function draw(){
   ctx.imageSmoothingEnabled = scale*WORLD.blocks_per_px < 1;
   const [ox,oz]=b2s(WORLD.x0,WORLD.z0); const s=WORLD.blocks_per_px*scale;
   if(img.complete&&img.naturalWidth) ctx.drawImage(img,ox,oz,WORLD.w*s,WORLD.h*s);
+  if(showBiomes&&bimg.complete&&bimg.naturalWidth){ctx.globalAlpha=0.55;ctx.drawImage(bimg,ox,oz,WORLD.w*s,WORLD.h*s);ctx.globalAlpha=1;}
   if(showSlime){
     if(scale<0.25){ctx.font='12px system-ui';ctx.fillStyle='#8f8';ctx.fillText('zoom in to see slime chunks',12,innerHeight-44);}
     else{
@@ -72,14 +82,22 @@ function draw(){
       }
     }
   }
-  if(showGrid){ctx.strokeStyle='rgba(255,255,255,.25)';ctx.lineWidth=1;ctx.font='11px system-ui';ctx.fillStyle='rgba(255,255,255,.6)';
-    const step=512, gx0=Math.floor(WORLD.x0/step)*step;
-    for(let x=gx0;x<=WORLD.x0+WORLD.w*WORLD.blocks_per_px;x+=step){const [sx]=b2s(x,0);ctx.beginPath();ctx.moveTo(sx,0);ctx.lineTo(sx,innerHeight);ctx.stroke();ctx.fillText(x,sx+3,innerHeight-30);}
-    const gz0=Math.floor(WORLD.z0/step)*step;
-    for(let z=gz0;z<=WORLD.z0+WORLD.h*WORLD.blocks_per_px;z+=step){const [,sz]=b2s(0,z);ctx.beginPath();ctx.moveTo(0,sz);ctx.lineTo(innerWidth,sz);ctx.stroke();ctx.fillText(z,4,sz-3);}
+  if(showGrid){ctx.strokeStyle='rgba(255,255,255,.25)';ctx.lineWidth=1;
+    const step=512, gx0=Math.floor(WORLD.x0/step)*step, gz0=Math.floor(WORLD.z0/step)*step;
+    const xs=[],zs=[];
+    for(let x=gx0;x<=WORLD.x0+WORLD.w*WORLD.blocks_per_px;x+=step){const [sx]=b2s(x,0);ctx.beginPath();ctx.moveTo(sx,0);ctx.lineTo(sx,innerHeight);ctx.stroke();xs.push([x,sx]);}
+    for(let z=gz0;z<=WORLD.z0+WORLD.h*WORLD.blocks_per_px;z+=step){const [,sz]=b2s(0,z);ctx.beginPath();ctx.moveTo(0,sz);ctx.lineTo(innerWidth,sz);ctx.stroke();zs.push([z,sz]);}
+    // header row / column, pinned to the screen edges like a spreadsheet
+    const top=hudBottom(); ctx.font='bold 11px system-ui';
+    ctx.fillStyle='rgba(0,0,0,.55)';ctx.fillRect(0,top,innerWidth,16);ctx.fillRect(0,top,44,innerHeight-top);
+    ctx.fillStyle='#fff';ctx.textBaseline='middle';
+    for(const [x,sx] of xs) if(sx>44&&sx<innerWidth) ctx.fillText(x,sx+3,top+8);
+    ctx.textAlign='right'; for(const [z,sz] of zs) if(sz>top+16&&sz<innerHeight) ctx.fillText(z,40,sz+8);
+    ctx.textAlign='left';ctx.textBaseline='alphabetic';
   }
   for(const p of PINS) drawPin(p, p.type==='home'?'#ffd54a':(ICON[p.type]||'#ff5252'));
   if(tap) drawPin(tap,'#4fc3f7',true);
+  ctx.fillStyle='rgba(27,27,27,.88)';ctx.fillRect(0,0,innerWidth,hudBottom());
 }
 // Bedrock slime chunks: seed-independent. seed=(chunkX*0x1f1f1f1f)^chunkZ as uint32, MT19937 first output % 10 == 0.
 const slimeCache=new Map();
@@ -97,6 +115,8 @@ function drawPin(p,color,ring){
   ctx.beginPath();ctx.arc(sx,sz,ring?6:7,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#000';ctx.stroke();
   if(p.name&&scale>0.35){ctx.font='bold 12px system-ui';ctx.lineWidth=3;ctx.strokeStyle='#000';ctx.strokeText(p.name,sx+10,sz+4);ctx.fillStyle='#fff';ctx.fillText(p.name,sx+10,sz+4);}
 }
+function hudBottom(){const h=document.getElementById('hud');return h.offsetTop+h.offsetHeight;}
+function biomeAt(x,z){if(!bdata)return '';const px=Math.floor((x-WORLD.x0)/WORLD.blocks_per_px),pz=Math.floor((z-WORLD.z0)/WORLD.blocks_per_px);if(px<0||pz<0||px>=bdata.width||pz>=bdata.height)return '';const i=(pz*bdata.width+px)*4,d=bdata.data;if(d[i+3]===0)return '';const hex='#'+[d[i],d[i+1],d[i+2]].map(v=>v.toString(16).padStart(2,'0')).join('');const b=BIOMES.find(b=>b.color===hex);return b?b.name:'';}
 function fromHome(x,z){
   const dx=x-HOME.x, dz=z-HOME.z, d=Math.round(Math.hypot(dx,dz));
   const dirs=['N','NE','E','SE','S','SW','W','NW']; const ang=Math.atan2(dx,-dz); // 0 = north
@@ -118,7 +138,7 @@ function onTap(sx,sz){
   // hit a pin?
   for(const p of PINS){const [px,pz]=b2s(p.x,p.z);if(Math.hypot(px-sx,pz-sz)<16){showPin(p);return;}}
   const [bx,bz]=s2b(sx,sz); tap={x:Math.round(bx),z:Math.round(bz)};
-  document.getElementById('coords').textContent=`X ${tap.x}  Z ${tap.z} · ${fromHome(tap.x,tap.z)}`+(isSlime(Math.floor(tap.x/16),Math.floor(tap.z/16))?' · slime chunk':''); draw();
+  document.getElementById('coords').textContent=`X ${tap.x}  Z ${tap.z} · ${fromHome(tap.x,tap.z)}`+(isSlime(Math.floor(tap.x/16),Math.floor(tap.z/16))?' · slime chunk':'')+(biomeAt(tap.x,tap.z)?' · '+biomeAt(tap.x,tap.z):''); draw();
 }
 // ---- sheet ----
 const sheet=document.getElementById('sheet'), body=document.getElementById('sheetBody');
@@ -133,6 +153,8 @@ document.getElementById('btnPins').onclick=()=>{
 };
 document.getElementById('btnHome').onclick=()=>{cx=HOME.x;cz=HOME.z;draw();};
 document.getElementById('btnGrid').onclick=e=>{showGrid=!showGrid;e.target.classList.toggle('on',showGrid);draw();};
+const key=document.getElementById('key'); key.innerHTML=BIOMES.map(b=>`<div><i style="background:${b.color}"></i>${b.name}</div>`).join('')+'<div class="m" style="color:#999">best guess from map colours</div>';
+document.getElementById('btnBiomes').onclick=e=>{showBiomes=!showBiomes;e.target.classList.toggle('on',showBiomes);key.style.display=showBiomes?'block':'none';draw();};
 document.getElementById('btnSlime').onclick=e=>{showSlime=!showSlime;e.target.classList.toggle('on',showSlime);draw();};
 img.onload=draw; resize();
 </script>

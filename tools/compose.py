@@ -17,7 +17,13 @@ world=json.load(open(os.path.join(D,'world.json')))
 def hudmask(t):
     m=np.zeros((128,128),bool); m[0:9,36:92]=True; m[121:128,52:78]=True; m[127:128,:]=True; m[61:68,61:68]=True
     hsv=cv2.cvtColor(t,cv2.COLOR_BGR2HSV); gray=(hsv[...,1]<40)&(hsv[...,2]>60)&(hsv[...,2]<200); m[:12]|=gray[:12]
-    return m
+    # slivers of the map's paper border that survived rectification, top and bottom edges
+    dark=hsv[...,2]<70
+    pp=paper(t)|dark; edge=np.zeros_like(m); edge[:9]=True; edge[117:]=True; m[:4]=True; m[123:]=True; m[:13,34:94]=True
+    pm=pp&edge; pm=cv2.dilate(pm.astype(np.uint8),np.ones((3,3),np.uint8)).astype(bool)&edge
+    # XP number (green digits) and dark ticks on the paper border near the bottom
+    green=(hsv[...,0]>35)&(hsv[...,0]<90)&(hsv[...,1]>150)&(hsv[...,2]>200); m[118:]|=green[118:]
+    return m|pm
 # level 3 first (2x upscale), HUD pixels inpainted since nothing sits underneath
 for n,(fx,fy) in world['level3'].items():
     t=cv2.imread(os.path.join(T,f'rect_IMG_{n}.png')); t=cv2.inpaint(t,hudmask(t).astype(np.uint8),3,cv2.INPAINT_TELEA)
@@ -31,6 +37,11 @@ l2=json.load(open(os.path.join(D,'assign.json')))
 for n,(fx,fy) in l2.items():
     t=cv2.imread(os.path.join(T,f'rect_IMG_{n}.png'))
     put(t,fx*128,fy*128,~hudmask(t))
+# fill what the HUD covered (and anything else still empty) from the flattened wall photo, img/wall.png
+wp=os.path.join(R,'img','wall.png')
+if os.path.exists(wp):
+    w=cv2.imread(wp,cv2.IMREAD_UNCHANGED); hole=(canvas[...,3]==0)&(w[...,3]>0)
+    canvas[hole]=np.concatenate([w[hole][:,:3],np.full((hole.sum(),1),255,np.uint8)],1)
 cv2.imwrite(os.path.join(R,'img','world.png'),canvas)
 world['level2']=l2; json.dump(world,open(os.path.join(D,'world.json'),'w'),indent=1)
 print('explored px',int((canvas[...,3]>0).sum()))
