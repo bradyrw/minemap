@@ -5,7 +5,7 @@
   "x": -2428,
   "y": 63,
   "z": -449,
-  "notes": "Round house with the map wall."
+  "notes": "Plains, on the lake. Round house with the map wall."
  },
  {
   "name": "Woodland Mansion",
@@ -261,7 +261,7 @@
   "x": -3113,
   "y": 72,
   "z": -758,
-  "notes": "Skeleton spawner XP farm built into the cliff over the water: beds, chests, crafting table, furnaces, glass cases. Sign reads 'Watch them zoom by!'. Bones, arrows and XP."
+  "notes": "Forest cliff over the water. Skeleton spawner XP farm built into the cliff: beds, chests, crafting table, furnaces, glass cases. Sign reads 'Watch them zoom by!'. Bones, arrows and XP."
  },
  {
   "name": "Parrots + ocelots",
@@ -301,7 +301,7 @@
   "x": -201,
   "y": 64,
   "z": -1667,
-  "notes": "Temporary lodging with a Nether portal, built while scouting by elytra for basalt deltas (froglights). Nether side ≈ (-22, -218) in a warped forest — no hostiles but endermen. 580 blocks north of the map wall's top edge."
+  "notes": "Bamboo jungle. Temporary lodging with a Nether portal, built while scouting by elytra for basalt deltas (froglights). Nether side ≈ (-22, -218) in a warped forest — no hostiles but endermen. Parrots/ocelots/pandas possible here too. 580 blocks north of the map wall's top edge."
  },
  {
   "name": "Frog hut (cold)",
@@ -309,7 +309,7 @@
   "x": -1739,
   "y": 109,
   "z": -524,
-  "notes": "Cobblestone box on the snowy peak with a breeding pair; tadpoles raised here come out green. Pool is roofed so it can't freeze. A portal here linked to the one east of Home, so it's broken for now. Reach by boat: river east from Home to the mountain foot ≈ (-1760, -620)."
+  "notes": "Snowy slopes on the peak. Cobblestone box with a breeding pair; tadpoles raised here come out green. Pool is roofed so it can't freeze. A portal here linked to the one east of Home, so it's broken for now. Reach by boat: river east from Home to the mountain foot ≈ (-1760, -620)."
  },
  {
   "name": "Jungle base + frog hut (warm)",
@@ -317,7 +317,7 @@
   "x": -2733,
   "y": 63,
   "z": 904,
-  "notes": "Base at the foot of a jungle tree on the river. River biome is temperate, so the growing pool was moved back into the bamboo jungle; tadpoles raised there come out white."
+  "notes": "Bamboo jungle, on the river (the riverbank itself is River biome — temperate). Base at the foot of a jungle tree; the growing pool was moved back into the bamboo so tadpoles come out white."
  },
  {
   "name": "Swamp house",
@@ -325,7 +325,7 @@
   "x": -133,
   "y": 62,
   "z": -152,
-  "notes": "Oak A-frame with chimney by a giant red mushroom. Temporary house for frog and slime hunting in the swamp."
+  "notes": "Swamp, by a giant red mushroom. Oak A-frame with chimney; temporary house for frog and slime hunting."
  },
  {
   "name": "North portal 2 (snowy)",
@@ -333,6 +333,6 @@
   "x": -2025,
   "y": 102,
   "z": -2014,
-  "notes": "Second attempt portal, on snow among spruce. Linked correctly: Nether side (-258, 89, -256) in a crimson forest."
+  "notes": "Snowy taiga / spruce with snow. Second attempt portal. Linked correctly: Nether side (-258, 89, -256) in a crimson forest."
  }
 ]
