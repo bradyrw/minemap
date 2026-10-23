@@ -48,7 +48,7 @@ button.pill.on{background:var(--accent);color:#000}
 <div id="key"></div>
 <div id="sheet"><button class="close" id="btnClose">×</button><div id="sheetBody"></div></div>
 <script type="module">
-const WORLD = {"x0": -4160, "z0": -1088, "blocks_per_px": 4, "w": 1024, "h": 512};      // {x0,z0,blocks_per_px,w,h}
+const WORLD = {"x0": -4160, "z0": -2112, "blocks_per_px": 4, "w": 1024, "h": 768};      // {x0,z0,blocks_per_px,w,h}
 const PINS  = await (await fetch("data/pins.json?"+Date.now())).json();       // [{name,type,x,z,notes}]
 const IMG_SRC = "img/world.png?"+Date.now();
 const NETHER = await (await fetch("data/nether.json?"+Date.now())).json();
