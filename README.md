@@ -4,7 +4,7 @@ Brady's annotated Minecraft (Bedrock, iPhone) world map. Static site on GitHub P
 
 ## Layout
 - `index.html` — touch pan/zoom viewer. Tap = coords + direction from Home; Pins sheet has "Go to X,Z"; Grid = 512-block map frames.
-- `img/world.png` — stitched world, 4 blocks/px (level-2 resolution). Level-3 tiles fill in under missing level-2s.
+- `img/world.png` — stitched world, 4 blocks/px. Level-3 tiles fill in under missing level-2s; level-4 maps (`img/tiles/l4_*.png`, 16 blocks/px, listed in `data/world.json` → `level4` with their frame origin in blocks) fill anything still empty. Image origin is (x0,z0) in world.json; the 8×4 level-2 wall sits at z −1088 inside it.
 - `data/world.json` — world image placement (`x0`,`z0`, blocks per px) and which screenshot sits in which frame.
 - `data/nether.json` — Nether pins `{name,type,x,y,z,notes}` in NETHER coordinates; the viewer's Nether toggle draws them at ×8 on the Overworld map and adds Nether coords to the tap readout.
 - `data/pins.json` — points of interest: `{name,type,x,y,z,notes}`. Types: home, village, portal, stronghold, cave, outpost, mansion, ruins, temple, monument, spawner, mine, loot, danger, cliff, mountain, mob, landmark, biome.
@@ -20,7 +20,7 @@ Brady's annotated Minecraft (Bedrock, iPhone) world map. Static site on GitHub P
 - Viewer toggles: Grid (512-block map frames, with pinned header row/column), Biomes (overlay + key; tap readout names the biome), Slime (Bedrock slime chunks — seed-independent, computed in JS: `seed=(chunkX*0x1f1f1f1f)^chunkZ`, MT19937 first output % 10 == 0).
 
 ## Coordinate facts (Bedrock, verified)
-- Maps are grid-aligned: a map of size S (128·2^level) covers `S·k − 64 … S·k + S − 65` on both axes.
+- Maps are grid-aligned: a map of size S (128·2^level) covers `S·k − 64 … S·k + S − 65` on both axes. Level-4 (S=2048) frames therefore start at −4160, −2112, −64 …
 - Map wall = 8×4 level-2 maps, top-left frame starts at (x −4160, z −1088). Frame (fx,fy) top-left = (−4160 + 512·fx, −1088 + 512·fy).
 - Home: round house at (−2428, 63, −449).
 

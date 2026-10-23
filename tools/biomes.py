@@ -23,7 +23,7 @@ names=list(REF); cents=[];owner=[]
 for i,n in enumerate(names):
     for col in REF[n]: cents.append(col); owner.append(i)
 cents=cv2.cvtColor(np.uint8([cents]),cv2.COLOR_BGR2LAB)[0].astype(np.float32); owner=np.array(owner)
-d=((lab[:,None,:]-cents[None,:,:])**2).sum(2); cls=owner[d.argmin(1)].reshape(512,1024)
+d=((lab[:,None,:]-cents[None,:,:])**2).sum(2); cls=owner[d.argmin(1)].reshape(c.shape[0],c.shape[1])
 # colour rules on the unblurred image, as cell densities (8x8 px = 32 blocks)
 hsv=cv2.cvtColor(bgr,cv2.COLOR_BGR2HSV); h,s,v=hsv[...,0].astype(int),hsv[...,1].astype(int),hsv[...,2].astype(int)
 pink=(((h<12)|(h>150))&(s>35)&(s<170)&(v>150)).astype(np.float32)
@@ -51,7 +51,7 @@ for _ in range(2):
 PAL={'Deep ocean':'#1f3f8f','Water (lake / river / shallows)':'#3f8fe0','Plains':'#9bd54a','Meadow / highland grass':'#d8e36a',
  'Forest':'#2e8b3a','Dark forest':'#145a22','Taiga (spruce)':'#3f8f7a','Snowy taiga':'#6f8f8a','Swamp':'#5a5a2a',
  'Mountains / stone':'#8a8a8a','Snow':'#f0f4ff','Cherry grove':'#ff9ad5','Autumn forest':'#e07a2a','Beach / sand':'#f2e2a0'}
-out=np.zeros((512,1024,4),np.uint8)
+out=np.zeros((c.shape[0],c.shape[1],4),np.uint8)
 for i,n in enumerate(names):
     hx=PAL[n].lstrip('#'); rgb=tuple(int(hx[k:k+2],16) for k in (0,2,4))
     m=(cls==i)&explored; out[m]=(rgb[2],rgb[1],rgb[0],255)

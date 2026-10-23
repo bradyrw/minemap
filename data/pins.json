@@ -328,11 +328,11 @@
   "notes": "Oak A-frame with chimney by a giant red mushroom. Temporary house for frog and slime hunting in the swamp."
  },
  {
-  "name": "Portal east of Home",
+  "name": "North portal 2 (snowy)",
   "type": "portal",
-  "x": -2200,
-  "y": 63,
-  "z": -449,
-  "notes": "Approximate — the Nether portal east of Home that the frozen-peak portal linked to. Brady to confirm exact coords."
+  "x": -2025,
+  "y": 102,
+  "z": -2014,
+  "notes": "Second attempt portal, on snow among spruce. Linked correctly: Nether side (-258, 89, -256) in a crimson forest."
  }
 ]

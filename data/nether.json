@@ -1,4 +1,18 @@
 [
- {"name":"North portal (Nether side)","type":"portal","x":-22,"y":60,"z":-218,"notes":"Comes out in a warped forest — no hostile spawns except endermen. Overworld side is the North cabin at (-201, -1667)."},
- {"name":"Home-side portal (Nether side, approx)","type":"portal","x":-275,"y":64,"z":-56,"notes":"Nether side of the portal east of Home, estimated from the Overworld pin ÷ 8. Brady to confirm."}
+ {
+  "name": "North portal (Nether side)",
+  "type": "portal",
+  "x": -22,
+  "y": 60,
+  "z": -218,
+  "notes": "Comes out in a warped forest — no hostile spawns except endermen. Overworld side is the North cabin at (-201, -1667). Open warped-forest floor around (-22, -243) with a basalt pillar nearby."
+ },
+ {
+  "name": "North portal 2 (Nether side)",
+  "type": "portal",
+  "x": -258,
+  "y": 89,
+  "z": -256,
+  "notes": "Crimson forest — hoglins and piglins here, bring gold armour. Overworld side at (-2025, 102, -2014)."
+ }
 ]
