@@ -1,0 +1,4 @@
+[
+ {"name":"North portal (Nether side)","type":"portal","x":-22,"y":60,"z":-218,"notes":"Comes out in a warped forest — no hostile spawns except endermen. Overworld side is the North cabin at (-201, -1667)."},
+ {"name":"Home-side portal (Nether side, approx)","type":"portal","x":-275,"y":64,"z":-56,"notes":"Nether side of the portal east of Home, estimated from the Overworld pin ÷ 8. Brady to confirm."}
+]

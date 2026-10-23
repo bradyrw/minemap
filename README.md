@@ -6,6 +6,7 @@ Brady's annotated Minecraft (Bedrock, iPhone) world map. Static site on GitHub P
 - `index.html` — touch pan/zoom viewer. Tap = coords + direction from Home; Pins sheet has "Go to X,Z"; Grid = 512-block map frames.
 - `img/world.png` — stitched world, 4 blocks/px (level-2 resolution). Level-3 tiles fill in under missing level-2s.
 - `data/world.json` — world image placement (`x0`,`z0`, blocks per px) and which screenshot sits in which frame.
+- `data/nether.json` — Nether pins `{name,type,x,y,z,notes}` in NETHER coordinates; the viewer's Nether toggle draws them at ×8 on the Overworld map and adds Nether coords to the tap readout.
 - `data/pins.json` — points of interest: `{name,type,x,y,z,notes}`. Types: home, village, portal, stronghold, cave, outpost, mansion, ruins, temple, monument, spawner, mine, loot, danger, cliff, mountain, mob, landmark, biome.
 - `img/tiles/` — cleaned 128×128 map tiles cropped from screenshots.
 - `img/wall.png` — the map wall photographed and warped flat (tools/wallfill.py); fills pixels the screenshot HUD covered.
