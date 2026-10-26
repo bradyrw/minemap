@@ -2,57 +2,57 @@
  {
   "name": "Deep ocean",
   "color": "#1f3f8f",
-  "px": 134677
+  "px": 134245
  },
  {
   "name": "Water (lake / river / shallows)",
   "color": "#3f8fe0",
-  "px": 94305
+  "px": 98668
  },
  {
   "name": "Plains",
   "color": "#9bd54a",
-  "px": 138593
+  "px": 140252
  },
  {
   "name": "Meadow / highland grass",
   "color": "#d8e36a",
-  "px": 1678
+  "px": 1870
  },
  {
   "name": "Forest",
   "color": "#2e8b3a",
-  "px": 143988
+  "px": 145482
  },
  {
   "name": "Dark forest",
   "color": "#145a22",
-  "px": 46720
+  "px": 46608
  },
  {
   "name": "Taiga (spruce)",
   "color": "#3f8f7a",
-  "px": 42656
+  "px": 43617
  },
  {
   "name": "Snowy taiga",
   "color": "#6f8f8a",
-  "px": 14212
+  "px": 14195
  },
  {
   "name": "Swamp",
   "color": "#5a5a2a",
-  "px": 10926
+  "px": 10866
  },
  {
   "name": "Mountains / stone",
   "color": "#8a8a8a",
-  "px": 1808
+  "px": 3065
  },
  {
   "name": "Snow",
   "color": "#f0f4ff",
-  "px": 8830
+  "px": 9015
  },
  {
   "name": "Cherry grove",
@@ -62,11 +62,11 @@
  {
   "name": "Autumn forest",
   "color": "#e07a2a",
-  "px": 4220
+  "px": 4373
  },
  {
   "name": "Beach / sand",
   "color": "#f2e2a0",
-  "px": 12111
+  "px": 12984
  }
 ]

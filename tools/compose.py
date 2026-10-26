@@ -51,7 +51,13 @@ if os.path.exists(wp):
 for name,(bx,bz) in world.get('level4',{}).items():
     t=cv2.imread(os.path.join(T,f'l4_{name}.png')); up=cv2.resize(t,(512,512),interpolation=cv2.INTER_NEAREST)
     hm=cv2.resize(hudmask(t).astype(np.uint8),(512,512),interpolation=cv2.INTER_NEAREST).astype(bool)
-    m=~paper(up)&~hm; m=cv2.erode(m.astype(np.uint8),np.ones((9,9),np.uint8)).astype(bool)
+    pm=paper(up)|hm
+    # unexplored paper = big connected blobs; single map pixels that happen to be paper-coloured (sand, birch) are kept
+    n,lab,st,_=cv2.connectedComponentsWithStats(pm.astype(np.uint8),connectivity=4)
+    big=np.zeros_like(pm)
+    for j in range(1,n):
+        if st[j,4]>=12*16: big[lab==j]=True
+    m=~big; m=cv2.erode(m.astype(np.uint8),np.ones((5,5),np.uint8)).astype(bool)
     px,pz=(bx-X0)//4,(bz-Z0)//4
     sub=canvas[pz:pz+512,px:px+512]; hole=(sub[...,3]==0)&m[:sub.shape[0],:sub.shape[1]]
     sub[hole]=np.concatenate([up[:sub.shape[0],:sub.shape[1]][hole],np.full((hole.sum(),1),255,np.uint8)],1)
