@@ -87,6 +87,7 @@ canvas{display:block;image-rendering:pixelated}
 const WORLD = {"x0": -4160, "z0": -2112, "blocks_per_px": 4, "w": 1024, "h": 768};      // {x0,z0,blocks_per_px,w,h}
 const PINS  = await (await fetch("data/pins.json?"+Date.now())).json();       // [{name,type,x,z,notes}]
 const IMG_SRC = "img/world.png?"+Date.now();
+const NROUTES = await (await fetch("data/nether_routes.json?"+Date.now())).json();
 const NETHER = await (await fetch("data/nether.json?"+Date.now())).json();
 const FRAMES = await (await fetch("data/frames.json?"+Date.now())).json();
 const BIOMES = await (await fetch("data/biomes.json?"+Date.now())).json();
@@ -100,7 +101,7 @@ const cv=document.getElementById('c'), ctx=cv.getContext('2d');
 const img=new Image(); img.src=IMG_SRC;
 let dpr=window.devicePixelRatio||1;
 // view: scale = screen px per block; cx,cz = world block coords at screen center
-let scale=0.5, cx=HOME.x, cz=HOME.z, showSlime=false, showBiomes=false, showNether=false, showTerrain=false, frameLevel=0, tap=null;
+let scale=0.5, cx=HOME.x, cz=HOME.z, showSlime=false, showBiomes=false, showNether=false, showTerrain=false, frameLevel=0, netherMode=0, tap=null;
 
 function resize(){dpr=window.devicePixelRatio||1;cv.width=innerWidth*dpr;cv.height=innerHeight*dpr;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';draw();}
 addEventListener('resize',resize);
@@ -146,7 +147,18 @@ function drawInner(){
   labelRects=[]; const PRI={home:0,village:1,portal:2,mob:3,loot:4,spawner:4,mansion:4,outpost:4,monument:4,village2:5};
   const ordered=[...PINS].sort((a,b)=>(PRI[a.type]??6)-(PRI[b.type]??6));
   for(const p of ordered) drawPin(p, ICON[p.type]||'#ff5252');
-  if(showNether) for(const p of NETHER) drawNether(p);
+  if(showNether){
+    if(netherMode===2){ctx.fillStyle='rgba(60,10,20,.45)';ctx.fillRect(0,0,innerWidth,innerHeight);}
+    // 128-block Nether grid = 1024 Overworld; helps judge tunnel lengths
+    if(scale>0.08){ctx.strokeStyle='rgba(176,108,240,.35)';ctx.lineWidth=1;const G=1024;const [ax,az]=s2b(0,0),[bx,bz]=s2b(innerWidth,innerHeight);
+      for(let x=Math.floor(ax/G)*G;x<=bx;x+=G){const [sx]=b2s(x,0);ctx.beginPath();ctx.moveTo(sx,0);ctx.lineTo(sx,innerHeight);ctx.stroke();}
+      for(let z=Math.floor(az/G)*G;z<=bz;z+=G){const [,sz]=b2s(0,z);ctx.beginPath();ctx.moveTo(0,sz);ctx.lineTo(innerWidth,sz);ctx.stroke();}}
+    for(const r of NROUTES.tunnels){ctx.beginPath();r.points.forEach(([x,z],i)=>{const [sx,sz]=b2s(x*8,z*8);i?ctx.lineTo(sx,sz):ctx.moveTo(sx,sz);});
+      ctx.lineWidth=5;ctx.strokeStyle='rgba(0,0,0,.6)';ctx.setLineDash([]);ctx.stroke();
+      ctx.lineWidth=3;ctx.strokeStyle=r.status==='dug'?'#e8b4ff':'#b06cf0';ctx.setLineDash(r.status==='dug'?[]:[8,6]);ctx.stroke();ctx.setLineDash([]);
+      if(scale>0.25){const [x,z]=r.points[Math.floor(r.points.length/2)];const [sx,sz]=b2s(x*8,z*8);const L=Math.round(r.points.slice(1).reduce((a,p,i)=>a+Math.hypot(p[0]-r.points[i][0],p[1]-r.points[i][1]),0));chip(`${r.name} · ${L} nether blocks`,sx,sz-14,'#e8d6ff');}}
+    for(const p of NETHER) drawNether(p);
+  }
   if(tap) drawPin(tap,'#4fc3f7',true);
   // compass: N is −z (up), E is +x (right)
   const cxp=innerWidth-30, czp=innerHeight-44;
@@ -210,6 +222,8 @@ function zoomAt(sx,sz,f){const [bx,bz]=s2b(sx,sz);scale=Math.min(8,Math.max(0.05
 function onTap(sx,sz){
   // hit a pin?
   if(showNether) for(const p of NETHER){const [px,pz]=b2s(p.x*8,p.z*8);if(Math.hypot(px-sx,pz-sz)<16){showNetherPin(p);return;}}
+  if(showNether) for(const r of NROUTES.tunnels){for(let i=1;i<r.points.length;i++){const [ax,az]=b2s(r.points[i-1][0]*8,r.points[i-1][1]*8),[bx,bz]=b2s(r.points[i][0]*8,r.points[i][1]*8);
+    const t=Math.max(0,Math.min(1,((sx-ax)*(bx-ax)+(sz-az)*(bz-az))/((bx-ax)**2+(bz-az)**2||1)));if(Math.hypot(ax+t*(bx-ax)-sx,az+t*(bz-az)-sz)<12){showRoute(r);return;}}}
   for(const p of PINS){const [px,pz]=b2s(p.x,p.z);if(Math.hypot(px-sx,pz-sz)<16){showPin(p);return;}}
   const [bx,bz]=s2b(sx,sz); tap={x:Math.round(bx),z:Math.round(bz)};
   if(frameLevel){const f=FRAMES['L'+frameLevel].find(f=>bx>=f.x0&&bx<f.x0+f.size&&bz>=f.z0&&bz<f.z0+f.size);if(f){showFrame(f);setReadout(tap.x,tap.z);draw();return;}}
@@ -228,6 +242,9 @@ function lbStep(d){if(!lbp)return;lbi=(lbi+d+lbp.photos.length)%lbp.photos.lengt
 lb.querySelector('.nav.l').onclick=e=>{e.stopPropagation();lbStep(-1);};lb.querySelector('.nav.r').onclick=e=>{e.stopPropagation();lbStep(1);};
 lb.onclick=()=>lb.style.display='none';
 let lbx=null;lb.addEventListener('pointerdown',e=>lbx=e.clientX);lb.addEventListener('pointerup',e=>{if(lbx!=null&&Math.abs(e.clientX-lbx)>40){lbStep(e.clientX<lbx?1:-1);setTimeout(()=>lb.style.display='flex',0);}lbx=null;});
+function showRoute(r){const a=r.points[0],b=r.points[r.points.length-1];const L=Math.round(r.points.slice(1).reduce((s,p,i)=>s+Math.hypot(p[0]-r.points[i][0],p[1]-r.points[i][1]),0));
+  const dx=b[0]-a[0],dz=b[1]-a[1];const dirs=['N','NE','E','SE','S','SW','W','NW'];const dir=dirs[Math.round(((Math.atan2(dx,-dz)/(Math.PI*2))*8+8))%8];
+  open(`<h3>${r.name}</h3><div class="m">Nether <b>${a[0]}, ${a[1]}</b> → <b>${b[0]}, ${b[1]}</b> · y ${r.y}<br>${L} Nether blocks heading ${dir} (= ${L*8} Overworld)</div><span class="tag">${r.status==='dug'?'dug':'planned'}</span><span class="tag">Nether</span>${r.notes?`<p>${r.notes}</p>`:''}`);}
 function showNetherPin(p){open(`<h3>${p.name}</h3><div class="m">Nether <b>${p.x}, ${p.z}</b>${p.y!=null?' · y '+p.y:''}<br>Overworld ${p.x*8}, ${p.z*8} · ${fromHome(p.x*8,p.z*8)}</div>${tagHtml(p,'<span class="tag">Nether</span>')}${p.notes?`<p>${p.notes}</p>`:''}${photosHtml(p)}`);wirePhotos(p);cx=p.x*8;cz=p.z*8;draw();}
 const tkey=document.getElementById('tkey');
 document.getElementById('btnTerrain').onclick=e=>{showTerrain=!showTerrain;e.target.classList.toggle('on',showTerrain);tkey.style.display=showTerrain?'block':'none';draw();};
@@ -243,7 +260,7 @@ function showFrame(f){
 }
 const frameBtn=document.getElementById('btnFrames');
 frameBtn.onclick=()=>{frameLevel=(frameLevel+1)%5; if(frameLevel===1)frameLevel=2; frameBtn.textContent=frameLevel?`Frames L${frameLevel}`:'Frames'; frameBtn.classList.toggle('on',!!frameLevel); draw();};
-document.getElementById('btnNether').onclick=e=>{showNether=!showNether;e.target.classList.toggle('on',showNether);draw();};
+document.getElementById('btnNether').onclick=e=>{netherMode=(netherMode+1)%3;showNether=netherMode>0;e.target.classList.toggle('on',showNether);e.target.textContent=netherMode===2?'Nether ◐':'Nether';draw();};
 document.getElementById('btnPins').onclick=()=>{
   const order=['home','village','portal','mob','loot','resource','mine','spawner','mansion','outpost','monument','ruins','cave','cliff','mountain','landmark','biome'];
   const groups={};PINS.forEach((p,i)=>{(groups[p.type]=groups[p.type]||[]).push([p,i]);});

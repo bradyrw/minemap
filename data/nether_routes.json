@@ -1,0 +1,36 @@
+{
+ "tunnels": [
+  {
+   "name": "Home tunnel (south)",
+   "y": 121,
+   "points": [
+    [
+     -307,
+     -31
+    ],
+    [
+     -307,
+     162
+    ]
+   ],
+   "notes": "Dug at y 121 from the Home portal, straight south until it opened into the cavern. Torches on the right going out.",
+   "status": "dug"
+  },
+  {
+   "name": "To the North cabin portal",
+   "y": 121,
+   "points": [
+    [
+     -307,
+     -31
+    ],
+    [
+     -22,
+     -218
+    ]
+   ],
+   "notes": "Planned: ~340 blocks. Connects the Home portal to the North cabin portal; the lava crossing may already bridge part of it.",
+   "status": "planned"
+  }
+ ]
+}

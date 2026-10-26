@@ -38,25 +38,13 @@
   ]
  },
  {
-  "name": "Tunnel south",
-  "type": "landmark",
-  "biome": "Nether wastes",
-  "x": -307,
-  "y": 121,
-  "z": 62,
-  "notes": "The y-121 tunnel running south from the Home portal.",
-  "photos": [
-   "img/poi/tunnel-south/1f74ec79.jpg"
-  ]
- },
- {
   "name": "Cavern + lava crossing",
   "type": "landmark",
   "biome": "Warped forest below",
   "x": -307,
   "y": 96,
   "z": 162,
-  "notes": "Tunnel breaks into a big cavern with warped forest on the floor. Someone's makeshift lava crossing is visible — possibly the same one seen from the North cabin portal, which would put the two portals in the same cavern system.",
+  "notes": "Where the tunnel from the Home portal breaks into a big cavern: warped forest on the floor, a cobble-and-netherrack lava crossing someone built. Possibly the same crossing seen from the North cabin portal.",
   "photos": [
    "img/poi/cavern-lava-crossing/b9388fa2.jpg"
   ]
