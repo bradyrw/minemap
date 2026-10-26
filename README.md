@@ -19,7 +19,7 @@ Brady's annotated Minecraft (Bedrock, iPhone) world map. Static site on GitHub P
   - `biomes.py` — rebuild the biome layer after compose.
   - `compose.py` — assembles `img/world.png` from `img/tiles/` + `data/assign.json` + `data/world.json` (level-3 list).
   - `crop.py`, `rectify.py` — helpers (border detection, perspective-rectify to 128×128). `sift.py`, `refine.py` — older one-offs.
-- Viewer toggles: Grid (512-block map frames, with pinned header row/column), Biomes (overlay + key; tap readout names the biome), Slime (Bedrock slime chunks — seed-independent, computed in JS: `seed=(chunkX*0x1f1f1f1f)^chunkZ`, MT19937 first output % 10 == 0).
+- Viewer toggles: Frames (map-frame grid per level with coverage, coordinate chips, pinned headers), Biomes (overlay + key; tap readout names the biome), Slime (Bedrock slime chunks — seed-independent, computed in JS: `seed=(chunkX*0x1f1f1f1f)^chunkZ`, MT19937 first output % 10 == 0).
 
 ## Coordinate facts (Bedrock, verified)
 - Maps are grid-aligned: a map of size S (128·2^level) covers `S·k − 64 … S·k + S − 65` on both axes. Level-4 (S=2048) frames therefore start at −4160, −2112, −64 …

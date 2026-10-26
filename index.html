@@ -71,7 +71,6 @@ canvas{display:block;image-rendering:pixelated}
   </div>
   <div id="layers">
     <button class="pill" id="btnFrames">Frames</button>
-    <button class="pill" id="btnGrid">Grid</button>
     <button class="pill" id="btnBiomes">Biomes</button>
     <button class="pill" id="btnTerrain">Terrain</button>
     <button class="pill" id="btnSlime">Slime</button>
@@ -100,7 +99,7 @@ const cv=document.getElementById('c'), ctx=cv.getContext('2d');
 const img=new Image(); img.src=IMG_SRC;
 let dpr=window.devicePixelRatio||1;
 // view: scale = screen px per block; cx,cz = world block coords at screen center
-let scale=0.5, cx=HOME.x, cz=HOME.z, showGrid=false, showSlime=false, showBiomes=false, showNether=false, showTerrain=false, frameLevel=0, tap=null;
+let scale=0.5, cx=HOME.x, cz=HOME.z, showSlime=false, showBiomes=false, showNether=false, showTerrain=false, frameLevel=0, tap=null;
 
 function resize(){dpr=window.devicePixelRatio||1;cv.width=innerWidth*dpr;cv.height=innerHeight*dpr;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';draw();}
 addEventListener('resize',resize);
@@ -125,19 +124,6 @@ function drawInner(){
       }
     }
   }
-  if(showGrid){ctx.strokeStyle='rgba(255,255,255,.25)';ctx.lineWidth=1;
-    const step=512, gx0=Math.floor((WORLD.x0+64)/step)*step-64, gz0=Math.floor((WORLD.z0+64)/step)*step-64;
-    const xs=[],zs=[];
-    for(let x=gx0;x<=WORLD.x0+WORLD.w*WORLD.blocks_per_px;x+=step){const [sx]=b2s(x,0);ctx.beginPath();ctx.moveTo(sx,0);ctx.lineTo(sx,innerHeight);ctx.stroke();xs.push([x,sx]);}
-    for(let z=gz0;z<=WORLD.z0+WORLD.h*WORLD.blocks_per_px;z+=step){const [,sz]=b2s(0,z);ctx.beginPath();ctx.moveTo(0,sz);ctx.lineTo(innerWidth,sz);ctx.stroke();zs.push([z,sz]);}
-    // header row / column, pinned to the screen edges like a spreadsheet
-    const top=hudBottom(); ctx.font='bold 11px system-ui';
-    ctx.fillStyle='rgba(20,22,26,.7)';ctx.fillRect(0,top,innerWidth,16);ctx.fillRect(0,top,44,innerHeight-top);
-    ctx.fillStyle='#fff';ctx.textBaseline='middle';
-    for(const [x,sx] of xs) if(sx>44&&sx<innerWidth) ctx.fillText(x,sx+3,top+8);
-    ctx.textAlign='right'; for(const [z,sz] of zs) if(sz>top+16&&sz<innerHeight) ctx.fillText(z,40,sz+8);
-    ctx.textAlign='left';ctx.textBaseline='alphabetic';
-  }
   if(frameLevel){const fr=FRAMES['L'+frameLevel]; const COL={have:'rgba(80,200,120,.18)',partial:'rgba(242,201,76,.25)',coarse:'rgba(255,120,60,.25)',none:'rgba(255,255,255,.06)'};
     ctx.font='600 12px -apple-system,system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
     for(const f of fr){const [sx,sz]=b2s(f.x0,f.z0);const sw=f.size*scale;if(sx+sw<0||sz+sw<0||sx>innerWidth||sz>innerHeight)continue;
@@ -151,6 +137,10 @@ function drawInner(){
     ctx.font='600 11px -apple-system,system-ui,sans-serif';
     const z0=Math.floor((s2b(0,0)[1]+64)/S)*S-64, z1=s2b(0,innerHeight)[1];
     for(let z=z0;z<=z1;z+=S){const [,sz]=b2s(0,z);if(sz<hudBottom()+10||sz>innerHeight)continue;chip(`z ${z}`,midX,sz,'#fff');}
+    const top=hudBottom();ctx.fillStyle='rgba(20,22,26,.7)';ctx.fillRect(0,top,innerWidth,16);ctx.fillRect(0,top,46,innerHeight-top);
+    ctx.font='600 10px -apple-system,system-ui,sans-serif';ctx.fillStyle='#ddd';ctx.textBaseline='middle';ctx.textAlign='left';
+    for(let x=x0;x<=x1;x+=S){const [sx]=b2s(x,0);if(sx>46&&sx<innerWidth)ctx.fillText(x,sx+3,top+8);}
+    ctx.textAlign='right';for(let z=z0;z<=z1;z+=S){const [,sz]=b2s(0,z);if(sz>top+16&&sz<innerHeight)ctx.fillText(z,42,sz+8);}
     ctx.textAlign='left';ctx.textBaseline='alphabetic';}
   labelRects=[]; const PRI={home:0,village:1,portal:2,mob:3,loot:4,spawner:4,mansion:4,outpost:4,monument:4,village2:5};
   const ordered=[...PINS].sort((a,b)=>(PRI[a.type]??6)-(PRI[b.type]??6));
@@ -268,7 +258,6 @@ document.getElementById('btnPins').onclick=()=>{
   document.getElementById('search').oninput=e=>{const q=e.target.value.trim().toLowerCase();rows.forEach(li=>{if(li.classList.contains('sec')){li.style.display=q?'none':'';return;}const p=li.dataset.n!=null?NETHER[+li.dataset.n]:PINS[+li.dataset.i];li.style.display=(!q||(p.name+' '+(p.biome||'')+' '+(p.notes||'')).toLowerCase().includes(q))?'':'none';});};
 };
 document.getElementById('btnHome').onclick=()=>{cx=HOME.x;cz=HOME.z;draw();};
-document.getElementById('btnGrid').onclick=e=>{showGrid=!showGrid;e.target.classList.toggle('on',showGrid);draw();};
 const key=document.getElementById('key'); key.innerHTML=BIOMES.map(b=>`<div><i style="background:${b.color}"></i>${b.name}</div>`).join('')+'<div style="color:var(--muted)">best guess from map colours</div>';
 document.getElementById('btnBiomes').onclick=e=>{showBiomes=!showBiomes;e.target.classList.toggle('on',showBiomes);key.style.display=showBiomes?'block':'none';draw();};
 document.getElementById('btnSlime').onclick=e=>{showSlime=!showSlime;e.target.classList.toggle('on',showSlime);draw();};
