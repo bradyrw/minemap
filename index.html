@@ -33,6 +33,11 @@ canvas{display:block;image-rendering:pixelated}
 #sheet .m b{color:var(--fg);font-weight:600}
 #sheet p{margin:10px 0 0;line-height:1.5}
 .tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--panel2);color:var(--fg);margin:6px 6px 0 0;vertical-align:middle}
+.fchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.fchip{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:5px 10px;font-size:12px;color:var(--fg);font-family:inherit;cursor:pointer}
+.fchip i{width:10px;height:10px;border-radius:50%;border:1px solid #0008}
+.fchip small{color:var(--muted)}
+.fchip.off{opacity:.4;text-decoration:line-through}
 .tag i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle;border:1px solid #0006}
 #sheet .row{display:flex;gap:8px;margin-top:10px}
 #sheet input{flex:1;min-width:0;background:#0f1114;color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:9px 10px;font-size:16px;font-family:inherit}
@@ -146,7 +151,7 @@ function drawInner(){
     ctx.textAlign='left';ctx.textBaseline='alphabetic';}
   labelRects=[]; const PRI={home:0,village:1,portal:2,mob:3,loot:4,spawner:4,mansion:4,outpost:4,monument:4,village2:5};
   const ordered=[...PINS].sort((a,b)=>(PRI[a.type]??6)-(PRI[b.type]??6));
-  for(const p of ordered) drawPin(p, ICON[p.type]||'#ff5252');
+  for(const p of ordered) if(!hidden.has(p.type)) drawPin(p, ICON[p.type]||'#ff5252');
   if(showNether){
     if(netherMode===2){ctx.fillStyle='rgba(60,10,20,.45)';ctx.fillRect(0,0,innerWidth,innerHeight);}
     // 128-block Nether grid = 1024 Overworld; helps judge tunnel lengths
@@ -178,14 +183,16 @@ function mtFirst(seed){
   y^=y>>>11; y^=(y<<7)&0x9d2c5680; y^=(y<<15)&0xefc60000; y^=y>>>18; return y>>>0;
 }
 function isSlime(cx,cz){const k=cx+','+cz;let v=slimeCache.get(k);if(v===undefined){v=mtFirst((Math.imul(cx,0x1f1f1f1f)^cz)>>>0)%10===0;slimeCache.set(k,v);}return v;}
-const ICON={home:'#f2c94c',village:'#d08b3c',portal:'#b06cf0',stronghold:'#8ad',cave:'#9e9e9e',outpost:'#ff7a1a',mansion:'#e03c3c',ruins:'#dcc67a',temple:'#dcc67a',monument:'#3cc8e0',spawner:'#e05050',resource:'#4fe3ff',mine:'#4fe3ff',loot:'#ffd700',danger:'#f22',cliff:'#e6c47a',mountain:'#c8c8c8',mob:'#8bc34a',landmark:'#ffffff',biome:'#7ccf7c'};
-const TYPE_LABEL={home:'Home',village:'Village',portal:'Nether portal',cave:'Cave',outpost:'Pillager outpost',mansion:'Woodland mansion',ruins:'Ruins',monument:'Ocean monument',spawner:'Spawner farm',resource:'Resource',mine:'Resource',loot:'Loot',cliff:'Cliff',mountain:'Mountain',mob:'Animals / mobs',landmark:'Landmark',biome:'Biome'};
+const ICON={home:'#f2c94c',village:'#d08b3c',tent:'#f0e6c8',igloo:'#cfe8ff',shipwreck:'#8d6e63',portal:'#b06cf0',stronghold:'#8ad',cave:'#9e9e9e',outpost:'#ff7a1a',mansion:'#e03c3c',ruins:'#dcc67a',temple:'#dcc67a',monument:'#3cc8e0',spawner:'#e05050',resource:'#4fe3ff',mine:'#4fe3ff',loot:'#ffd700',danger:'#f22',cliff:'#e6c47a',mountain:'#c8c8c8',mob:'#8bc34a',landmark:'#ffffff',biome:'#7ccf7c'};
+const GLYPH={home:'⌂',village:'⌂',tent:'⋀',igloo:'◠',shipwreck:'⚓',portal:'◈',cave:'∩',outpost:'▲',mansion:'▣',ruins:'≋',monument:'◆',spawner:'✕',resource:'●',mine:'●',loot:'$',cliff:'⫽',mountain:'▲',mob:'♥',landmark:'★',biome:'❀'};
+const TYPE_LABEL={home:'Home',village:'Village',tent:'Woodland tent',igloo:'Igloo',shipwreck:'Shipwreck',portal:'Nether portal',cave:'Cave',outpost:'Pillager outpost',mansion:'Woodland mansion',ruins:'Ruins',monument:'Ocean monument',spawner:'Spawner farm',resource:'Resource',mine:'Resource',loot:'Loot',cliff:'Cliff',mountain:'Mountain',mob:'Animals / mobs',landmark:'Landmark',biome:'Biome'};
 const tagHtml=(p,extra)=>`<span class="tag"><i style="background:${ICON[p.type]||'#ff5252'}"></i>${TYPE_LABEL[p.type]||p.type}</span>${p.biome?`<span class="tag">${p.biome}</span>`:''}${extra||''}`;
 function drawPin(p,color,ring){
   const [sx,sz]=b2s(p.x,p.z);
   const r=p.type==='home'?8:(ring?6:6.5);
   ctx.beginPath();ctx.arc(sx,sz,r+1.5,0,Math.PI*2);ctx.fillStyle='rgba(0,0,0,.55)';ctx.fill();
   ctx.beginPath();ctx.arc(sx,sz,r,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle='rgba(255,255,255,.85)';ctx.stroke();
+  if(!ring&&GLYPH[p.type]){ctx.font='700 9px -apple-system,system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='rgba(0,0,0,.8)';ctx.fillText(GLYPH[p.type],sx,sz+0.5);ctx.textAlign='left';ctx.textBaseline='alphabetic';}
   const want=p.name&&!ring&&(scale>0.45||p.type==='home'||p.type==='village'||p.type==='portal');
   if(want){ctx.font='600 12px -apple-system,system-ui,sans-serif';const w=ctx.measureText(p.name).width;const rect=[sx+9,sz-7,sx+13+w,sz+8];
     if(!labelRects.some(r=>rect[0]<r[2]&&rect[2]>r[0]&&rect[1]<r[3]&&rect[3]>r[1])){labelRects.push(rect);ctx.lineWidth=3.5;ctx.strokeStyle='rgba(0,0,0,.8)';ctx.lineJoin='round';ctx.strokeText(p.name,sx+11,sz+4);ctx.fillStyle='#fff';ctx.fillText(p.name,sx+11,sz+4);}}
@@ -208,7 +215,7 @@ function fromHome(x,z){
   return d<5?'at Home':`${d} blocks ${dir} of Home`;
 }
 // ---- input ----
-let labelRects=[];
+let labelRects=[]; let hidden=new Set(['biome']); try{const h=JSON.parse(localStorage.getItem('hiddenTypes'));if(Array.isArray(h))hidden=new Set(h);}catch(e){}
 const pts=new Map(); let last=null, pinchD=0, moved=false, downT=0;
 cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.clientX,e.clientY]);moved=false;downT=Date.now();
   if(pts.size===2){const [a,b]=[...pts.values()];pinchD=Math.hypot(a[0]-b[0],a[1]-b[1]);}});
@@ -224,7 +231,7 @@ function onTap(sx,sz){
   if(showNether) for(const p of NETHER){const [px,pz]=b2s(p.x*8,p.z*8);if(Math.hypot(px-sx,pz-sz)<16){showNetherPin(p);return;}}
   if(showNether) for(const r of NROUTES.tunnels){for(let i=1;i<r.points.length;i++){const [ax,az]=b2s(r.points[i-1][0]*8,r.points[i-1][1]*8),[bx,bz]=b2s(r.points[i][0]*8,r.points[i][1]*8);
     const t=Math.max(0,Math.min(1,((sx-ax)*(bx-ax)+(sz-az)*(bz-az))/((bx-ax)**2+(bz-az)**2||1)));if(Math.hypot(ax+t*(bx-ax)-sx,az+t*(bz-az)-sz)<12){showRoute(r);return;}}}
-  for(const p of PINS){const [px,pz]=b2s(p.x,p.z);if(Math.hypot(px-sx,pz-sz)<16){showPin(p);return;}}
+  for(const p of PINS){if(hidden.has(p.type))continue;const [px,pz]=b2s(p.x,p.z);if(Math.hypot(px-sx,pz-sz)<16){showPin(p);return;}}
   const [bx,bz]=s2b(sx,sz); tap={x:Math.round(bx),z:Math.round(bz)};
   if(frameLevel){const f=FRAMES['L'+frameLevel].find(f=>bx>=f.x0&&bx<f.x0+f.size&&bz>=f.z0&&bz<f.z0+f.size);if(f){showFrame(f);setReadout(tap.x,tap.z);draw();return;}}
   setReadout(tap.x,tap.z); draw();
@@ -262,14 +269,16 @@ const frameBtn=document.getElementById('btnFrames');
 frameBtn.onclick=()=>{frameLevel=(frameLevel+1)%5; if(frameLevel===1)frameLevel=2; frameBtn.textContent=frameLevel?`Frames L${frameLevel}`:'Frames'; frameBtn.classList.toggle('on',!!frameLevel); draw();};
 document.getElementById('btnNether').onclick=e=>{netherMode=(netherMode+1)%3;showNether=netherMode>0;e.target.classList.toggle('on',showNether);e.target.textContent=netherMode===2?'Nether ◐':'Nether';draw();};
 document.getElementById('btnPins').onclick=()=>{
-  const order=['home','village','portal','mob','loot','resource','mine','spawner','mansion','outpost','monument','ruins','cave','cliff','mountain','landmark','biome'];
+  const order=['home','village','portal','mob','tent','shipwreck','igloo','loot','resource','mine','spawner','mansion','outpost','monument','ruins','cave','cliff','mountain','landmark','biome'];
   const groups={};PINS.forEach((p,i)=>{(groups[p.type]=groups[p.type]||[]).push([p,i]);});
   const dist=p=>Math.hypot(p.x-HOME.x,p.z-HOME.z);
   const li=(p,i,n)=>`<li data-${n!=null?'n':'i'}="${n!=null?n:i}"><i style="background:${n!=null?'#b06cf0':(ICON[p.type]||'#ff5252')}"></i><span class="n">${p.name}</span><span class="m">${n!=null?'Nether '+p.x+', '+p.z:fromHome(p.x,p.z)}</span></li>`;
   let items='';
   for(const t of order){if(!groups[t])continue;items+=`<li class="sec">${TYPE_LABEL[t]||t}</li>`+groups[t].sort((a,b)=>dist(a[0])-dist(b[0])).map(([p,i])=>li(p,i)).join('');}
   if(showNether&&NETHER.length)items+=`<li class="sec">Nether</li>`+NETHER.map((p,i)=>li(p,null,i)).join('');
-  open(`<h3>Go to</h3><div class="row"><input id="gx" inputmode="numeric" placeholder="X"><input id="gz" inputmode="numeric" placeholder="Z"><button class="pill" id="go">Go</button></div><input id="search" placeholder="Search pins" autocomplete="off"><ul id="pins">${items}</ul>`);
+  const chips=order.filter(t=>groups[t]).map(t=>`<button class="fchip${hidden.has(t)?' off':''}" data-t="${t}"><i style="background:${ICON[t]}"></i>${TYPE_LABEL[t]||t} <small>${groups[t].length}</small></button>`).join('');
+  open(`<h3>Pins</h3><div class="fchips">${chips}</div><div class="m" style="margin-top:4px">tap a type to hide / show it on the map</div><div class="row"><input id="gx" inputmode="numeric" placeholder="X"><input id="gz" inputmode="numeric" placeholder="Z"><button class="pill" id="go">Go</button></div><input id="search" placeholder="Search pins" autocomplete="off"><ul id="pins">${items}</ul>`);
+  body.querySelectorAll('.fchip').forEach(b=>b.onclick=()=>{const t=b.dataset.t;hidden.has(t)?hidden.delete(t):hidden.add(t);b.classList.toggle('off',hidden.has(t));try{localStorage.setItem('hiddenTypes',JSON.stringify([...hidden]));}catch(e){}draw();});
   document.getElementById('go').onclick=()=>{const x=+gx.value,z=+gz.value;if(isNaN(x)||isNaN(z))return;tap={x,z};cx=x;cz=z;setReadout(x,z);sheet.style.display='none';draw();};
   const rows=[...body.querySelectorAll('#pins li')];
   rows.forEach(li=>{if(!li.classList.contains('sec'))li.onclick=()=>li.dataset.n!=null?showNetherPin(NETHER[+li.dataset.n]):showPin(PINS[+li.dataset.i]);});
