@@ -51,6 +51,7 @@ button.pill.on{background:var(--accent);color:#000}
   <button class="pill" id="btnSlime" title="Bedrock slime chunks (seed-independent)">Slime</button>
   <button class="pill" id="btnBiomes" title="Best-guess biomes from map colours">Biomes</button>
   <button class="pill" id="btnNether" title="Nether pins, drawn at Overworld position (×8)">Nether</button>
+  <button class="pill" id="btnTerrain" title="Slope shading exaggerated; red = rough/steep open ground, green hatch = tree canopy">Terrain</button>
 </div>
 <div id="key"></div>
 <div id="lb"><button class="nav l">‹</button><img id="lbimg"><button class="nav r">›</button><div class="cap" id="lbcap"></div></div>
@@ -62,6 +63,8 @@ const IMG_SRC = "img/world.png?"+Date.now();
 const NETHER = await (await fetch("data/nether.json?"+Date.now())).json();
 const BIOMES = await (await fetch("data/biomes.json?"+Date.now())).json();
 const bimg=new Image(); bimg.src="img/biomes.png?"+Date.now(); let bdata=null;
+const rimg=new Image(); rimg.src="img/relief.png?"+Date.now(); rimg.onload=draw;
+const timg=new Image(); timg.src="img/topo.png?"+Date.now(); timg.onload=draw;
 bimg.onload=()=>{const oc=document.createElement('canvas');oc.width=bimg.naturalWidth;oc.height=bimg.naturalHeight;const o=oc.getContext('2d');o.drawImage(bimg,0,0);bdata=o.getImageData(0,0,oc.width,oc.height);draw();};
 const HOME = PINS.find(p=>p.type==='home') || {x:-2428,z:-449,name:'Home'};
 
@@ -69,7 +72,7 @@ const cv=document.getElementById('c'), ctx=cv.getContext('2d');
 const img=new Image(); img.src=IMG_SRC;
 let dpr=window.devicePixelRatio||1;
 // view: scale = screen px per block; cx,cz = world block coords at screen center
-let scale=0.5, cx=HOME.x, cz=HOME.z, showGrid=false, showSlime=false, showBiomes=false, showNether=false, tap=null;
+let scale=0.5, cx=HOME.x, cz=HOME.z, showGrid=false, showSlime=false, showBiomes=false, showNether=false, showTerrain=false, tap=null;
 
 function resize(){dpr=window.devicePixelRatio||1;cv.width=innerWidth*dpr;cv.height=innerHeight*dpr;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';draw();}
 addEventListener('resize',resize);
@@ -79,7 +82,8 @@ function draw(){
   ctx.setTransform(dpr,0,0,dpr,0,0); ctx.fillStyle='#1b1b1b'; ctx.fillRect(0,0,innerWidth,innerHeight);
   ctx.imageSmoothingEnabled = scale*WORLD.blocks_per_px < 1;
   const [ox,oz]=b2s(WORLD.x0,WORLD.z0); const s=WORLD.blocks_per_px*scale;
-  if(img.complete&&img.naturalWidth) ctx.drawImage(img,ox,oz,WORLD.w*s,WORLD.h*s);
+  if(showTerrain&&rimg.complete&&rimg.naturalWidth){ctx.drawImage(rimg,ox,oz,WORLD.w*s,WORLD.h*s);if(timg.complete&&timg.naturalWidth)ctx.drawImage(timg,ox,oz,WORLD.w*s,WORLD.h*s);}
+  else if(img.complete&&img.naturalWidth) ctx.drawImage(img,ox,oz,WORLD.w*s,WORLD.h*s);
   if(showBiomes&&bimg.complete&&bimg.naturalWidth){ctx.globalAlpha=0.55;ctx.drawImage(bimg,ox,oz,WORLD.w*s,WORLD.h*s);ctx.globalAlpha=1;}
   if(showSlime){
     if(scale<0.25){ctx.font='12px system-ui';ctx.fillStyle='#8f8';ctx.fillText('zoom in to see slime chunks',12,innerHeight-44);}
@@ -172,6 +176,9 @@ lb.querySelector('.nav.l').onclick=e=>{e.stopPropagation();lbStep(-1);};lb.query
 lb.onclick=()=>lb.style.display='none';
 let lbx=null;lb.addEventListener('pointerdown',e=>lbx=e.clientX);lb.addEventListener('pointerup',e=>{if(lbx!=null&&Math.abs(e.clientX-lbx)>40){lbStep(e.clientX<lbx?1:-1);setTimeout(()=>lb.style.display='flex',0);}lbx=null;});
 function showNetherPin(p){open(`<h3>${p.name}</h3><div class="m">Nether · X ${p.x}, Z ${p.z}${p.y!=null?', Y '+p.y:''}<br>Overworld equivalent X ${p.x*8}, Z ${p.z*8} · ${fromHome(p.x*8,p.z*8)}</div>${p.notes?`<p>${p.notes}</p>`:''}${photosHtml(p)}`);wirePhotos(p);cx=p.x*8;cz=p.z*8;draw();}
+const tkey=document.createElement('div');tkey.id='tkey';tkey.style.cssText='position:fixed;left:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));background:var(--panel);backdrop-filter:blur(8px);border-radius:12px;padding:8px 10px;font-size:12px;display:none;z-index:2';
+tkey.innerHTML='<div><i style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#ff3030;opacity:.7;vertical-align:middle"></i> rough / steep open ground</div><div><i style="display:inline-block;width:14px;height:14px;border-radius:3px;background:repeating-linear-gradient(45deg,#287828 0 2px,transparent 2px 5px);vertical-align:middle"></i> tree canopy (terrain hidden)</div><div style="color:#999">streaks = the map\'s own slope shading, exaggerated</div>';document.body.appendChild(tkey);
+document.getElementById('btnTerrain').onclick=e=>{showTerrain=!showTerrain;e.target.classList.toggle('on',showTerrain);tkey.style.display=showTerrain?'block':'none';draw();};
 document.getElementById('btnNether').onclick=e=>{showNether=!showNether;e.target.classList.toggle('on',showNether);draw();};
 document.getElementById('btnPins').onclick=()=>{
   const items=PINS.map((p,i)=>`<li data-i="${i}"><span>${p.name}</span><span class="m">${fromHome(p.x,p.z)}</span></li>`).join('')
