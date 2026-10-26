@@ -7,12 +7,13 @@ Brady's annotated Minecraft (Bedrock, iPhone) world map. Static site on GitHub P
 - `img/world.png` — stitched world, 4 blocks/px. Level-3 tiles fill in under missing level-2s; level-4 maps (`img/tiles/l4_*.png`, 16 blocks/px, listed in `data/world.json` → `level4` with their frame origin in blocks) fill anything still empty. Image origin is (x0,z0) in world.json; the 8×4 level-2 wall sits at z −1088 inside it.
 - `data/world.json` — world image placement (`x0`,`z0`, blocks per px) and which screenshot sits in which frame.
 - `data/nether.json` — Nether pins `{name,type,x,y,z,notes}` in NETHER coordinates; the viewer's Nether toggle draws them at ×8 on the Overworld map and adds Nether coords to the tap readout.
-- `data/pins.json` — points of interest: `{name,type,x,y,z,notes}`. Convention: `notes` starts with the biome (Brady's rule — always note the biome). Types: home, village, portal, stronghold, cave, outpost, mansion, ruins, temple, monument, spawner, mine, loot, danger, cliff, mountain, mob, landmark, biome.
+- `data/pins.json` — points of interest: `{name,type,x,y,z,notes,photos[]}`; photos live in `img/poi/<slug>/` (≤1600px JPEG) and show as a strip in the pin sheet with a swipeable lightbox. One pin per place — several screenshots of the same village go on the one pin. Convention: `notes` starts with the biome (Brady's rule — always note the biome). Types: home, village, portal, stronghold, cave, outpost, mansion, ruins, temple, monument, spawner, mine, loot, danger, cliff, mountain, mob, landmark, biome.
 - `img/tiles/` — cleaned 128×128 map tiles cropped from screenshots.
 - `img/wall.png` — the map wall photographed and warped flat (tools/wallfill.py); fills pixels the screenshot HUD covered.
 - `img/biomes.png` + `data/biomes.json` — best-guess biome layer from map colours (tools/biomes.py), with the key the viewer shows.
 - `tools/` — run from repo root:
   - `place.py <wall_photo> <tile_screenshot>...` — rectifies tiles into `img/tiles/rect_IMG_<n>.png` and prints each one's grid (fx,fy) by matching against known tiles in a photo of the map wall. Add results to `data/assign.json`.
+  - `readcoords.py` — reads the `Position: x, y, z` HUD line off a screenshot by template-matching the pixel font (OCR fails on it); used to match POI screenshots to pins.
   - `wallfill.py <wall_photo>...` — rebuild `img/wall.png` (run when new wall photos or tiles arrive).
   - `biomes.py` — rebuild the biome layer after compose.
   - `compose.py` — assembles `img/world.png` from `img/tiles/` + `data/assign.json` + `data/world.json` (level-3 list).

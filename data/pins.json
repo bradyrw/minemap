@@ -5,7 +5,10 @@
   "x": -2428,
   "y": 63,
   "z": -449,
-  "notes": "Plains, on the lake. Round house with the map wall."
+  "notes": "Plains, on the lake. Round house with the map wall.",
+  "photos": [
+   "img/poi/home/IMG_9486.jpg"
+  ]
  },
  {
   "name": "Woodland Mansion",
@@ -13,7 +16,11 @@
   "x": -2998,
   "y": 79,
   "z": 408,
-  "notes": "Big dark-oak mansion in the roofed forest. Seen again from (-2928, 398). Dangerous: evokers/vindicators inside."
+  "notes": "Big dark-oak mansion in the roofed forest. Seen again from (-2928, 398). Dangerous: evokers/vindicators inside.",
+  "photos": [
+   "img/poi/woodland-mansion/IMG_9442.jpg",
+   "img/poi/woodland-mansion/IMG_9443.jpg"
+  ]
  },
  {
   "name": "Pillager Outpost",
@@ -21,7 +28,10 @@
   "x": -3814,
   "y": 67,
   "z": 464,
-  "notes": "Outpost tower next to a dark-oak building. Pillagers with crossbows — bring armor. Allays may be caged nearby."
+  "notes": "Outpost tower next to a dark-oak building. Pillagers with crossbows — bring armor. Allays may be caged nearby.",
+  "photos": [
+   "img/poi/pillager-outpost/IMG_9451.jpg"
+  ]
  },
  {
   "name": "Sulfur springs",
@@ -29,7 +39,10 @@
   "x": -3903,
   "y": 73,
   "z": 217,
-  "notes": "Sulfur springs (new-update feature) in the forest. Sulfur to collect."
+  "notes": "Sulfur springs (new-update feature) in the forest. Sulfur to collect.",
+  "photos": [
+   "img/poi/sulfur-springs/IMG_9446.jpg"
+  ]
  },
  {
   "name": "Big ravine + waterfalls",
@@ -37,7 +50,10 @@
   "x": -3460,
   "y": 65,
   "z": 518,
-  "notes": "Deep open ravine with several waterfalls, exposed stone layers and a cave mouth at the bottom. Good ore hunting."
+  "notes": "Deep open ravine with several waterfalls, exposed stone layers and a cave mouth at the bottom. Good ore hunting.",
+  "photos": [
+   "img/poi/big-ravine-waterfalls/IMG_9453.jpg"
+  ]
  },
  {
   "name": "Sulfur springs (bottom)",
@@ -45,7 +61,10 @@
   "x": -3622,
   "y": 52,
   "z": 293,
-  "notes": "Looking down into the bottom of a second sulfur springs — the pale sparkly stuff is sulfur, not diamonds."
+  "notes": "Looking down into the bottom of a second sulfur springs — the pale sparkly stuff is sulfur, not diamonds.",
+  "photos": [
+   "img/poi/sulfur-springs-bottom/IMG_9444.jpg"
+  ]
  },
  {
   "name": "Sandstone cliff",
@@ -53,7 +72,11 @@
   "x": -4114,
   "y": 64,
   "z": 768,
-  "notes": "Tall sandstone/sand cliff face dropping to the water. Easy sandstone and sand."
+  "notes": "Tall sandstone/sand cliff face dropping to the water. Easy sandstone and sand.",
+  "photos": [
+   "img/poi/sandstone-cliff/IMG_9449.jpg",
+   "img/poi/sandstone-cliff/IMG_9450.jpg"
+  ]
  },
  {
   "name": "Stone mountain",
@@ -61,7 +84,10 @@
   "x": -3649,
   "y": 92,
   "z": 597,
-  "notes": "Bare stone/gravel peaks with terraces. Stone, gravel, coal; watch for drops."
+  "notes": "Bare stone/gravel peaks with terraces. Stone, gravel, coal; watch for drops.",
+  "photos": [
+   "img/poi/stone-mountain/IMG_9452.jpg"
+  ]
  },
  {
   "name": "Longhorn cows",
@@ -69,7 +95,10 @@
   "x": -3818,
   "y": 64,
   "z": 39,
-  "notes": "Brown long-horned cows by the lake in the taiga. Pen them or lead with wheat."
+  "notes": "Brown long-horned cows by the lake in the taiga. Pen them or lead with wheat.",
+  "photos": [
+   "img/poi/longhorn-cows/IMG_9445.jpg"
+  ]
  },
  {
   "name": "Woodland tent",
@@ -77,7 +106,10 @@
   "x": -4051,
   "y": 65,
   "z": 610,
-  "notes": "Little woodland tent structure from the poplar-tree update: white canopy, birch posts, hay bales, chest. The explorer/treasure map came from here."
+  "notes": "Little woodland tent structure from the poplar-tree update: white canopy, birch posts, hay bales, chest. The explorer/treasure map came from here.",
+  "photos": [
+   "img/poi/woodland-tent/IMG_9447.jpg"
+  ]
  },
  {
   "name": "Explorer map found near here",
@@ -85,7 +117,10 @@
   "x": -4079,
   "y": 75,
   "z": 723,
-  "notes": "Holding the explorer/treasure map here, just after finding it in the woodland tent to the north. Come back here when ready to use it."
+  "notes": "Holding the explorer/treasure map here, just after finding it in the woodland tent to the north. Come back here when ready to use it.",
+  "photos": [
+   "img/poi/explorer-map-found-near-here/IMG_9448.jpg"
+  ]
  },
  {
   "name": "Deepslate spire",
@@ -93,7 +128,10 @@
   "x": -2645,
   "y": 64,
   "z": 187,
-  "notes": "Tall cobbled-deepslate spike on a hill — looks like a marker someone placed. Unknown what it marks; worth poking around."
+  "notes": "Tall cobbled-deepslate spike on a hill — looks like a marker someone placed. Unknown what it marks; worth poking around.",
+  "photos": [
+   "img/poi/deepslate-spire/IMG_9441.jpg"
+  ]
  },
  {
   "name": "Ocean Monument",
@@ -109,7 +147,10 @@
   "x": -1211,
   "y": 54,
   "z": -623,
-  "notes": "Stone-brick underwater ruins in a kelp forest. Chests with treasure maps, drowned around."
+  "notes": "Stone-brick underwater ruins in a kelp forest. Chests with treasure maps, drowned around.",
+  "photos": [
+   "img/poi/ocean-ruins/IMG_9373.jpg"
+  ]
  },
  {
   "name": "Shipwreck",
@@ -117,7 +158,10 @@
   "x": -4141,
   "y": 63,
   "z": -904,
-  "notes": "Beached shipwreck on the sand. Check all three chest spots (bow, stern, hold)."
+  "notes": "Beached shipwreck on the sand. Check all three chest spots (bow, stern, hold).",
+  "photos": [
+   "img/poi/shipwreck/IMG_9369.jpg"
+  ]
  },
  {
   "name": "Woodland tent (2nd)",
@@ -125,7 +169,11 @@
   "x": -333,
   "y": 75,
   "z": -422,
-  "notes": "Second woodland tent: white canopy, birch posts, chest, pink flowers. Explorer map in hand here."
+  "notes": "Second woodland tent: white canopy, birch posts, chest, pink flowers. Explorer map in hand here.",
+  "photos": [
+   "img/poi/woodland-tent-2nd/IMG_9379.jpg",
+   "img/poi/woodland-tent-2nd/IMG_9380.jpg"
+  ]
  },
  {
   "name": "Big cave mouth",
@@ -133,7 +181,10 @@
   "x": -406,
   "y": 62,
   "z": -471,
-  "notes": "Tall deepslate cave entrance opening right onto the water."
+  "notes": "Tall deepslate cave entrance opening right onto the water.",
+  "photos": [
+   "img/poi/big-cave-mouth/IMG_9378.jpg"
+  ]
  },
  {
   "name": "Mountain bridge",
@@ -141,7 +192,10 @@
   "x": -1891,
   "y": 117,
   "z": -607,
-  "notes": "Simple log bridge spanning two mountain tops."
+  "notes": "Simple log bridge spanning two mountain tops.",
+  "photos": [
+   "img/poi/mountain-bridge/IMG_9372.jpg"
+  ]
  },
  {
   "name": "Longhorn cows in a pen",
@@ -149,7 +203,10 @@
   "x": -3730,
   "y": 66,
   "z": -327,
-  "notes": "Fenced pen with longhorn cows and a pig, composter nearby — looks like a village farm."
+  "notes": "Fenced pen with longhorn cows and a pig, composter nearby — looks like a village farm.",
+  "photos": [
+   "img/poi/longhorn-cows-in-a-pen/IMG_9370.jpg"
+  ]
  },
  {
   "name": "Llamas + snowy peaks",
@@ -157,7 +214,10 @@
   "x": -1728,
   "y": 92,
   "z": -599,
-  "notes": "Llamas on the grass below snowy peaks, cherry trees nearby."
+  "notes": "Llamas on the grass below snowy peaks, cherry trees nearby.",
+  "photos": [
+   "img/poi/llamas-snowy-peaks/IMG_9374.jpg"
+  ]
  },
  {
   "name": "Swamp",
@@ -165,7 +225,10 @@
   "x": -311,
   "y": 63,
   "z": -91,
-  "notes": "Swamp biome: lily pads, slime chance at night, mangrove-ish trees."
+  "notes": "Swamp biome: lily pads, slime chance at night, mangrove-ish trees.",
+  "photos": [
+   "img/poi/swamp/IMG_9400.jpg"
+  ]
  },
  {
   "name": "Autumn forest",
@@ -173,7 +236,10 @@
   "x": -3470,
   "y": 78,
   "z": -1050,
-  "notes": "Red/orange autumn forest across the water."
+  "notes": "Red/orange autumn forest across the water.",
+  "photos": [
+   "img/poi/autumn-forest/IMG_9368.jpg"
+  ]
  },
  {
   "name": "Giant mushrooms",
@@ -181,7 +247,10 @@
   "x": -881,
   "y": 63,
   "z": -99,
-  "notes": "Huge red mushrooms in the forest — mushroom blocks / mushrooms for stew."
+  "notes": "Huge red mushrooms in the forest — mushroom blocks / mushrooms for stew.",
+  "photos": [
+   "img/poi/giant-mushrooms/IMG_9376.jpg"
+  ]
  },
  {
   "name": "Bamboo jungle edge",
@@ -189,7 +258,10 @@
   "x": -878,
   "y": 63,
   "z": -176,
-  "notes": "Jungle with bamboo and birch at the edge."
+  "notes": "Jungle with bamboo and birch at the edge.",
+  "photos": [
+   "img/poi/bamboo-jungle-edge/IMG_9377.jpg"
+  ]
  },
  {
   "name": "Shipwreck (beach)",
@@ -197,7 +269,10 @@
   "x": -1119,
   "y": 70,
   "z": 40,
-  "notes": "Second shipwreck, beached on the sand by birch forest."
+  "notes": "Second shipwreck, beached on the sand by birch forest.",
+  "photos": [
+   "img/poi/shipwreck-beach/IMG_9500.jpg"
+  ]
  },
  {
   "name": "Taiga village + outpost",
@@ -205,7 +280,13 @@
   "x": -843,
   "y": 68,
   "z": 670,
-  "notes": "Taiga/spruce village (berries, pumpkins, barrels) with a pillager outpost right next to it at (-855, 673) and a woodland tent at (-845, 672). Explorer map in hand here. Street view from (-829, 733)."
+  "notes": "Taiga/spruce village (berries, pumpkins, barrels) with a pillager outpost right next to it at (-855, 673) and a woodland tent at (-845, 672). Explorer map in hand here. Street view from (-829, 733).",
+  "photos": [
+   "img/poi/taiga-village-outpost/IMG_9496.jpg",
+   "img/poi/taiga-village-outpost/IMG_9497.jpg",
+   "img/poi/taiga-village-outpost/IMG_9498.jpg",
+   "img/poi/taiga-village-outpost/IMG_9499.jpg"
+  ]
  },
  {
   "name": "Snowy village",
@@ -213,7 +294,10 @@
   "x": -143,
   "y": 63,
   "z": 693,
-  "notes": "Snowy taiga village by the frozen water."
+  "notes": "Snowy taiga village by the frozen water.",
+  "photos": [
+   "img/poi/snowy-village/IMG_9494.jpg"
+  ]
  },
  {
   "name": "Igloo",
@@ -221,7 +305,10 @@
   "x": -306,
   "y": 61,
   "z": 724,
-  "notes": "Igloo — bed, crafting table, furnace. Check under the carpet for the basement ladder."
+  "notes": "Igloo — bed, crafting table, furnace. Check under the carpet for the basement ladder.",
+  "photos": [
+   "img/poi/igloo/IMG_9495.jpg"
+  ]
  },
  {
   "name": "Woodland tent (3rd)",
@@ -261,7 +348,10 @@
   "x": -3113,
   "y": 72,
   "z": -758,
-  "notes": "Forest cliff over the water. Skeleton spawner XP farm built into the cliff: beds, chests, crafting table, furnaces, glass cases. Sign reads 'Watch them zoom by!'. Bones, arrows and XP."
+  "notes": "Forest cliff over the water. Skeleton spawner XP farm built into the cliff: beds, chests, crafting table, furnaces, glass cases. Sign reads 'Watch them zoom by!'. Bones, arrows and XP.",
+  "photos": [
+   "img/poi/skeleton-spawner-xp-farm/IMG_9508.jpg"
+  ]
  },
  {
   "name": "Parrots + ocelots",
@@ -269,7 +359,10 @@
   "x": -2683,
   "y": 73,
   "z": 895,
-  "notes": "Bamboo jungle with parrots (seeds to tame) and ocelots (raw cod/salmon to trust). Also bamboo."
+  "notes": "Bamboo jungle with parrots (seeds to tame) and ocelots (raw cod/salmon to trust). Also bamboo.",
+  "photos": [
+   "img/poi/parrots-ocelots/IMG_9506.jpg"
+  ]
  },
  {
   "name": "Plains village",
@@ -277,7 +370,10 @@
   "x": -2016,
   "y": 64,
   "z": 810,
-  "notes": "Plains village with villagers, farms, bell — mountains behind. Closest village to Home (~1,300 blocks S)."
+  "notes": "Plains village with villagers, farms, bell — mountains behind. Closest village to Home (~1,300 blocks S).",
+  "photos": [
+   "img/poi/plains-village/IMG_9521.jpg"
+  ]
  },
  {
   "name": "Pillager outpost (lake)",
@@ -285,7 +381,10 @@
   "x": -1720,
   "y": 63,
   "z": 443,
-  "notes": "Outpost tower standing in the water. Pillagers with crossbows on the ground."
+  "notes": "Outpost tower standing in the water. Pillagers with crossbows on the ground.",
+  "photos": [
+   "img/poi/pillager-outpost-lake/IMG_9520.jpg"
+  ]
  },
  {
   "name": "Slime chunk next to Home",
@@ -301,7 +400,11 @@
   "x": -201,
   "y": 64,
   "z": -1667,
-  "notes": "Bamboo jungle. Temporary lodging with a Nether portal, built while scouting by elytra for basalt deltas (froglights). Nether side ≈ (-22, -218) in a warped forest — no hostiles but endermen. Parrots/ocelots/pandas possible here too. 580 blocks north of the map wall's top edge."
+  "notes": "Bamboo jungle. Temporary lodging with a Nether portal, built while scouting by elytra for basalt deltas (froglights). Nether side ≈ (-22, -218) in a warped forest — no hostiles but endermen. Parrots/ocelots/pandas possible here too. 580 blocks north of the map wall's top edge.",
+  "photos": [
+   "img/poi/north-cabin-portal/02b70ea0.jpg",
+   "img/poi/north-cabin-portal/159727e7.jpg"
+  ]
  },
  {
   "name": "Frog hut (cold)",
@@ -309,7 +412,10 @@
   "x": -1739,
   "y": 109,
   "z": -524,
-  "notes": "Snowy slopes on the peak. Cobblestone box with a breeding pair; tadpoles raised here come out green. Pool is roofed so it can't freeze. A portal here linked to the one east of Home, so it's broken for now. Reach by boat: river east from Home to the mountain foot ≈ (-1760, -620)."
+  "notes": "Snowy slopes on the peak. Cobblestone box with a breeding pair; tadpoles raised here come out green. Pool is roofed so it can't freeze. A portal here linked to the one east of Home, so it's broken for now. Reach by boat: river east from Home to the mountain foot ≈ (-1760, -620).",
+  "photos": [
+   "img/poi/frog-hut-cold/ab40235f.jpg"
+  ]
  },
  {
   "name": "Jungle base + frog hut (warm)",
@@ -325,7 +431,10 @@
   "x": -133,
   "y": 62,
   "z": -152,
-  "notes": "Swamp, by a giant red mushroom. Oak A-frame with chimney; temporary house for frog and slime hunting."
+  "notes": "Swamp, by a giant red mushroom. Oak A-frame with chimney; temporary house for frog and slime hunting.",
+  "photos": [
+   "img/poi/swamp-house/43f6f8f5.jpg"
+  ]
  },
  {
   "name": "North portal 2 (snowy)",
@@ -333,6 +442,9 @@
   "x": -2025,
   "y": 102,
   "z": -2014,
-  "notes": "Snowy taiga / spruce with snow. Second attempt portal. Linked correctly: Nether side (-258, 89, -256) in a crimson forest."
+  "notes": "Snowy taiga / spruce with snow. Second attempt portal. Linked correctly: Nether side (-258, 89, -256) in a crimson forest.",
+  "photos": [
+   "img/poi/north-portal-2-snowy/934ff835.jpg"
+  ]
  }
 ]

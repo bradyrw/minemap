@@ -19,7 +19,7 @@ canvas{display:block;image-rendering:pixelated}
 button.pill{cursor:pointer}
 button.pill.on{background:var(--accent);color:#000}
 #coords{flex:1;text-align:center;font-variant-numeric:tabular-nums}
-#sheet{position:fixed;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));background:var(--panel);backdrop-filter:blur(8px);border-radius:14px;padding:12px 14px;font-size:14px;display:none;max-height:45vh;overflow:auto}
+#sheet{position:fixed;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));background:var(--panel);backdrop-filter:blur(8px);border-radius:14px;padding:12px 14px;font-size:14px;display:none;max-height:55vh;overflow:auto}
 #sheet h3{margin:0 0 4px;font-size:16px}
 #sheet .m{color:var(--muted)}
 #sheet .row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
@@ -31,6 +31,13 @@ button.pill.on{background:var(--accent);color:#000}
 #key{position:fixed;right:8px;top:calc(96px + env(safe-area-inset-top,0px));background:var(--panel);backdrop-filter:blur(8px);border-radius:12px;padding:8px 10px;font-size:12px;display:none;max-height:50vh;overflow:auto}
 #key div{display:flex;align-items:center;gap:6px;padding:2px 0}
 #key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid #0008}
+.photos{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:4px}
+.photos img{height:84px;border-radius:8px;flex:none;cursor:pointer;border:1px solid #444}
+#lb{position:fixed;inset:0;background:#000e;display:none;z-index:10;align-items:center;justify-content:center;touch-action:pan-x}
+#lb img{max-width:100%;max-height:100%;object-fit:contain}
+#lb .nav{position:absolute;top:50%;transform:translateY(-50%);background:#0008;color:#fff;border:0;font-size:28px;padding:10px 14px;border-radius:999px}
+#lb .nav.l{left:8px}#lb .nav.r{right:8px}
+#lb .cap{position:absolute;bottom:calc(10px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;color:#ccc;font-size:13px}
 .close{position:absolute;right:10px;top:8px;background:none;border:0;color:var(--muted);font-size:20px}
 </style>
 </head>
@@ -46,6 +53,7 @@ button.pill.on{background:var(--accent);color:#000}
   <button class="pill" id="btnNether" title="Nether pins, drawn at Overworld position (×8)">Nether</button>
 </div>
 <div id="key"></div>
+<div id="lb"><button class="nav l">‹</button><img id="lbimg"><button class="nav r">›</button><div class="cap" id="lbcap"></div></div>
 <div id="sheet"><button class="close" id="btnClose">×</button><div id="sheetBody"></div></div>
 <script type="module">
 const WORLD = {"x0": -4160, "z0": -2112, "blocks_per_px": 4, "w": 1024, "h": 768};      // {x0,z0,blocks_per_px,w,h}
@@ -154,8 +162,16 @@ function onTap(sx,sz){
 const sheet=document.getElementById('sheet'), body=document.getElementById('sheetBody');
 function open(html){body.innerHTML=html;sheet.style.display='block';}
 document.getElementById('btnClose').onclick=()=>sheet.style.display='none';
-function showPin(p){open(`<h3>${p.name}</h3><div class="m">${p.type||''} · X ${p.x}, Z ${p.z}${p.y!=null?', Y '+p.y:''}<br>${fromHome(p.x,p.z)}</div>${p.notes?`<p>${p.notes}</p>`:''}`);cx=p.x;cz=p.z;draw();}
-function showNetherPin(p){open(`<h3>${p.name}</h3><div class="m">Nether · X ${p.x}, Z ${p.z}${p.y!=null?', Y '+p.y:''}<br>Overworld equivalent X ${p.x*8}, Z ${p.z*8} · ${fromHome(p.x*8,p.z*8)}</div>${p.notes?`<p>${p.notes}</p>`:''}`);cx=p.x*8;cz=p.z*8;draw();}
+function photosHtml(p){return p.photos&&p.photos.length?`<div class="photos">${p.photos.map((u,i)=>`<img src="${u}" loading="lazy" data-i="${i}">`).join('')}</div>`:'';}
+function wirePhotos(p){body.querySelectorAll('.photos img').forEach(img=>img.onclick=()=>openLb(p,+img.dataset.i));}
+function showPin(p){open(`<h3>${p.name}</h3><div class="m">${p.type||''} · X ${p.x}, Z ${p.z}${p.y!=null?', Y '+p.y:''}<br>${fromHome(p.x,p.z)}</div>${p.notes?`<p>${p.notes}</p>`:''}${photosHtml(p)}`);wirePhotos(p);cx=p.x;cz=p.z;draw();}
+const lb=document.getElementById('lb'),lbimg=document.getElementById('lbimg'),lbcap=document.getElementById('lbcap');let lbp=null,lbi=0;
+function openLb(p,i){lbp=p;lbi=i;lbimg.src=p.photos[i];lbcap.textContent=`${p.name} · ${i+1}/${p.photos.length}`;lb.style.display='flex';}
+function lbStep(d){if(!lbp)return;lbi=(lbi+d+lbp.photos.length)%lbp.photos.length;openLb(lbp,lbi);}
+lb.querySelector('.nav.l').onclick=e=>{e.stopPropagation();lbStep(-1);};lb.querySelector('.nav.r').onclick=e=>{e.stopPropagation();lbStep(1);};
+lb.onclick=()=>lb.style.display='none';
+let lbx=null;lb.addEventListener('pointerdown',e=>lbx=e.clientX);lb.addEventListener('pointerup',e=>{if(lbx!=null&&Math.abs(e.clientX-lbx)>40){lbStep(e.clientX<lbx?1:-1);setTimeout(()=>lb.style.display='flex',0);}lbx=null;});
+function showNetherPin(p){open(`<h3>${p.name}</h3><div class="m">Nether · X ${p.x}, Z ${p.z}${p.y!=null?', Y '+p.y:''}<br>Overworld equivalent X ${p.x*8}, Z ${p.z*8} · ${fromHome(p.x*8,p.z*8)}</div>${p.notes?`<p>${p.notes}</p>`:''}${photosHtml(p)}`);wirePhotos(p);cx=p.x*8;cz=p.z*8;draw();}
 document.getElementById('btnNether').onclick=e=>{showNether=!showNether;e.target.classList.toggle('on',showNether);draw();};
 document.getElementById('btnPins').onclick=()=>{
   const items=PINS.map((p,i)=>`<li data-i="${i}"><span>${p.name}</span><span class="m">${fromHome(p.x,p.z)}</span></li>`).join('')

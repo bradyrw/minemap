@@ -5,7 +5,11 @@
   "x": -22,
   "y": 60,
   "z": -218,
-  "notes": "Comes out in a warped forest — no hostile spawns except endermen. Overworld side is the North cabin at (-201, -1667). Open warped-forest floor around (-22, -243) with a basalt pillar nearby."
+  "notes": "Comes out in a warped forest — no hostile spawns except endermen. Overworld side is the North cabin at (-201, -1667). Open warped-forest floor around (-22, -243) with a basalt pillar nearby.",
+  "photos": [
+   "img/poi/north-portal-nether-side/6c60bc77.jpg",
+   "img/poi/north-portal-nether-side/c11b1696.jpg"
+  ]
  },
  {
   "name": "North portal 2 (Nether side)",
@@ -13,6 +17,9 @@
   "x": -258,
   "y": 89,
   "z": -256,
-  "notes": "Crimson forest — hoglins and piglins here, bring gold armour. Overworld side at (-2025, 102, -2014)."
+  "notes": "Crimson forest — hoglins and piglins here, bring gold armour. Overworld side at (-2025, 102, -2014).",
+  "photos": [
+   "img/poi/north-portal-2-nether-side/c18a42d0.jpg"
+  ]
  }
 ]
