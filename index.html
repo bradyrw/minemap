@@ -4,58 +4,84 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#1b1b1b">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#14161a">
 <title>minemap</title>
 <style>
-:root{--bg:#1b1b1b;--panel:#2a2a2ae6;--fg:#eee;--accent:#ffd54a;--muted:#999;box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,sans-serif;overflow:hidden;overscroll-behavior:none}
+:root{--bg:#14161a;--panel:rgba(22,24,29,.88);--panel2:rgba(34,37,44,.9);--fg:#ececec;--muted:#9a9ea8;--accent:#f2c94c;--line:rgba(255,255,255,.08);--r:14px;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);overflow:hidden;overscroll-behavior:none}
 #map{position:fixed;inset:0;touch-action:none;cursor:grab;background:var(--bg)}
 canvas{display:block;image-rendering:pixelated}
-#hud{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);display:flex;gap:6px;padding:8px;pointer-events:none}
+#hud{position:fixed;left:0;right:0;top:0;padding:calc(8px + env(safe-area-inset-top,0px)) 10px 8px;pointer-events:none;background:linear-gradient(var(--bg) 60%,transparent)}
 #hud>*{pointer-events:auto}
-.pill{background:var(--panel);backdrop-filter:blur(8px);border-radius:999px;padding:8px 12px;font-size:14px;border:0;color:var(--fg)}
-button.pill{cursor:pointer}
-button.pill.on{background:var(--accent);color:#000}
-#coords{flex:1;text-align:center;font-variant-numeric:tabular-nums}
-#sheet{position:fixed;left:8px;right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));background:var(--panel);backdrop-filter:blur(8px);border-radius:14px;padding:12px 14px;font-size:14px;display:none;max-height:55vh;overflow:auto}
-#sheet h3{margin:0 0 4px;font-size:16px}
-#sheet .m{color:var(--muted)}
-#sheet .row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
-#sheet input{flex:1;min-width:0;background:#111;color:var(--fg);border:1px solid #444;border-radius:8px;padding:8px;font-size:16px}
-#pins{list-style:none;margin:8px 0 0;padding:0}
-#pins li{padding:8px 0;border-top:1px solid #444;cursor:pointer;display:flex;justify-content:space-between;gap:8px}
-#pins li span.m{white-space:nowrap}
-#hud{flex-wrap:wrap}
-#key{position:fixed;right:8px;top:calc(96px + env(safe-area-inset-top,0px));background:var(--panel);backdrop-filter:blur(8px);border-radius:12px;padding:8px 10px;font-size:12px;display:none;max-height:50vh;overflow:auto}
-#key div{display:flex;align-items:center;gap:6px;padding:2px 0}
-#key i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid #0008}
-.photos{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:4px}
-.photos img{height:84px;border-radius:8px;flex:none;cursor:pointer;border:1px solid #444}
-#lb{position:fixed;inset:0;background:#000e;display:none;z-index:10;align-items:center;justify-content:center;touch-action:pan-x}
+#top{display:flex;align-items:center;gap:8px}
+#brand{font-weight:700;letter-spacing:.3px;font-size:15px;color:var(--accent);padding:0 4px}
+#coords{flex:1;min-width:0;background:var(--panel2);border-radius:999px;padding:7px 12px;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums;color:var(--muted)}
+#coords b{color:var(--fg);font-weight:600}
+#layers{display:flex;gap:6px;margin-top:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+#layers::-webkit-scrollbar{display:none}
+.pill{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--fg);flex:none;cursor:pointer;font-family:inherit}
+.pill.on{background:var(--accent);border-color:var(--accent);color:#1a1300;font-weight:600}
+.pill.icon{width:34px;padding:6px 0;text-align:center}
+#sheet{position:fixed;left:0;right:0;bottom:0;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:var(--r) var(--r) 0 0;padding:10px 16px calc(16px + env(safe-area-inset-bottom,0px));font-size:14px;display:none;max-height:62vh;overflow:auto;box-shadow:0 -8px 30px rgba(0,0,0,.4);z-index:3}
+#sheet:before{content:"";display:block;width:36px;height:4px;border-radius:2px;background:#555;margin:0 auto 10px}
+#sheet h3{margin:0 0 2px;font-size:18px;font-weight:700;padding-right:28px}
+#sheet .m{color:var(--muted);font-size:13px;line-height:1.5}
+#sheet .m b{color:var(--fg);font-weight:600}
+#sheet p{margin:10px 0 0;line-height:1.5}
+.tag{display:inline-block;font-size:11px;font-weight:600;letter-spacing:.3px;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--panel2);color:var(--fg);margin:6px 6px 0 0;vertical-align:middle}
+.tag i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle;border:1px solid #0006}
+#sheet .row{display:flex;gap:8px;margin-top:10px}
+#sheet input{flex:1;min-width:0;background:#0f1114;color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:9px 10px;font-size:16px;font-family:inherit}
+#sheet input::placeholder{color:#666}
+#pins{list-style:none;margin:10px 0 0;padding:0}
+#pins li{padding:9px 0;border-top:1px solid var(--line);cursor:pointer;display:flex;align-items:center;gap:10px}
+#pins li i{width:10px;height:10px;border-radius:50%;flex:none;border:1px solid #0008}
+#pins li span.n{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#pins li span.m{white-space:nowrap;font-size:12px}
+#pins li.sec{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.4px;padding:12px 0 4px;border-top:0;cursor:default}
+#search{width:100%;margin-top:4px}
+.photos{display:flex;gap:6px;overflow-x:auto;margin:12px -16px 0;padding:0 16px 4px;scrollbar-width:none}
+.photos::-webkit-scrollbar{display:none}
+.photos img{height:96px;border-radius:10px;flex:none;cursor:pointer;border:1px solid var(--line)}
+#lb{position:fixed;inset:0;background:#000;display:none;z-index:10;align-items:center;justify-content:center;touch-action:pan-x}
 #lb img{max-width:100%;max-height:100%;object-fit:contain}
-#lb .nav{position:absolute;top:50%;transform:translateY(-50%);background:#0008;color:#fff;border:0;font-size:28px;padding:10px 14px;border-radius:999px}
-#lb .nav.l{left:8px}#lb .nav.r{right:8px}
-#lb .cap{position:absolute;bottom:calc(10px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;color:#ccc;font-size:13px}
-.close{position:absolute;right:10px;top:8px;background:none;border:0;color:var(--muted);font-size:20px}
+#lb .nav{position:absolute;top:50%;transform:translateY(-50%);background:#0009;color:#fff;border:0;font-size:26px;width:44px;height:44px;border-radius:50%}
+#lb .nav.l{left:10px}#lb .nav.r{right:10px}
+#lb .cap{position:absolute;bottom:calc(14px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;color:#bbb;font-size:13px}
+.close{position:absolute;right:12px;top:12px;background:var(--panel2);border:0;color:var(--muted);font-size:16px;width:28px;height:28px;border-radius:50%;line-height:28px;text-align:center;cursor:pointer}
+#key{position:fixed;right:10px;top:calc(96px + env(safe-area-inset-top,0px));background:var(--panel);backdrop-filter:blur(10px);border-radius:12px;padding:8px 10px;font-size:12px;display:none;max-height:50vh;overflow:auto;z-index:2}
+#key div{display:flex;align-items:center;gap:7px;padding:2px 0}
+#key i{display:inline-block;width:12px;height:12px;border-radius:3px;border:1px solid #0008}
+#tkey{position:fixed;left:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));background:var(--panel);backdrop-filter:blur(10px);border-radius:12px;padding:8px 10px;font-size:12px;display:none;z-index:2;line-height:1.6}
+#tkey i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:middle;margin-right:6px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + env(safe-area-inset-bottom,0px));background:var(--panel2);color:var(--fg);padding:8px 14px;border-radius:999px;font-size:13px;display:none;z-index:4}
 </style>
 </head>
 <body>
 <div id="map"><canvas id="c"></canvas></div>
 <div id="hud">
-  <button class="pill" id="btnPins">Pins</button>
-  <div class="pill" id="coords">tap map</div>
-  <button class="pill" id="btnHome" title="Center on Home">⌂</button>
-  <button class="pill" id="btnGrid">Grid</button>
-  <button class="pill" id="btnSlime" title="Bedrock slime chunks (seed-independent)">Slime</button>
-  <button class="pill" id="btnBiomes" title="Best-guess biomes from map colours">Biomes</button>
-  <button class="pill" id="btnNether" title="Nether pins, drawn at Overworld position (×8)">Nether</button>
-  <button class="pill" id="btnTerrain" title="Slope shading exaggerated; red = rough/steep open ground, green hatch = tree canopy">Terrain</button>
+  <div id="top">
+    <div id="brand">minemap</div>
+    <div id="coords">tap the map for coordinates</div>
+    <button class="pill icon" id="btnHome" title="Center on Home">⌂</button>
+    <button class="pill" id="btnPins">Pins</button>
+  </div>
+  <div id="layers">
+    <button class="pill" id="btnGrid">Grid</button>
+    <button class="pill" id="btnBiomes">Biomes</button>
+    <button class="pill" id="btnTerrain">Terrain</button>
+    <button class="pill" id="btnSlime">Slime</button>
+    <button class="pill" id="btnNether">Nether</button>
+  </div>
 </div>
 <div id="key"></div>
+<div id="tkey"><div><i style="background:#ff3030;opacity:.75"></i>rough / steep open ground</div><div><i style="background:repeating-linear-gradient(45deg,#2c8a2c 0 2px,transparent 2px 5px)"></i>tree canopy (terrain hidden)</div><div style="color:var(--muted)">streaks = slope shading, exaggerated</div></div>
+<div id="toast"></div>
 <div id="lb"><button class="nav l">‹</button><img id="lbimg"><button class="nav r">›</button><div class="cap" id="lbcap"></div></div>
-<div id="sheet"><button class="close" id="btnClose">×</button><div id="sheetBody"></div></div>
+<div id="sheet"><button class="close" id="btnClose">✕</button><div id="sheetBody"></div></div>
 <script type="module">
 const WORLD = {"x0": -4160, "z0": -2112, "blocks_per_px": 4, "w": 1024, "h": 768};      // {x0,z0,blocks_per_px,w,h}
 const PINS  = await (await fetch("data/pins.json?"+Date.now())).json();       // [{name,type,x,z,notes}]
@@ -79,7 +105,7 @@ addEventListener('resize',resize);
 const b2s=(x,z)=>[(x-cx)*scale+innerWidth/2,(z-cz)*scale+innerHeight/2];
 const s2b=(sx,sz)=>[(sx-innerWidth/2)/scale+cx,(sz-innerHeight/2)/scale+cz];
 function draw(){
-  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.fillStyle='#1b1b1b'; ctx.fillRect(0,0,innerWidth,innerHeight);
+  ctx.setTransform(dpr,0,0,dpr,0,0); ctx.fillStyle='#14161a'; ctx.fillRect(0,0,innerWidth,innerHeight);
   ctx.imageSmoothingEnabled = scale*WORLD.blocks_per_px < 1;
   const [ox,oz]=b2s(WORLD.x0,WORLD.z0); const s=WORLD.blocks_per_px*scale;
   if(showTerrain&&rimg.complete&&rimg.naturalWidth){ctx.drawImage(rimg,ox,oz,WORLD.w*s,WORLD.h*s);if(timg.complete&&timg.naturalWidth)ctx.drawImage(timg,ox,oz,WORLD.w*s,WORLD.h*s);}
@@ -103,16 +129,18 @@ function draw(){
     for(let z=gz0;z<=WORLD.z0+WORLD.h*WORLD.blocks_per_px;z+=step){const [,sz]=b2s(0,z);ctx.beginPath();ctx.moveTo(0,sz);ctx.lineTo(innerWidth,sz);ctx.stroke();zs.push([z,sz]);}
     // header row / column, pinned to the screen edges like a spreadsheet
     const top=hudBottom(); ctx.font='bold 11px system-ui';
-    ctx.fillStyle='rgba(0,0,0,.55)';ctx.fillRect(0,top,innerWidth,16);ctx.fillRect(0,top,44,innerHeight-top);
+    ctx.fillStyle='rgba(20,22,26,.7)';ctx.fillRect(0,top,innerWidth,16);ctx.fillRect(0,top,44,innerHeight-top);
     ctx.fillStyle='#fff';ctx.textBaseline='middle';
     for(const [x,sx] of xs) if(sx>44&&sx<innerWidth) ctx.fillText(x,sx+3,top+8);
     ctx.textAlign='right'; for(const [z,sz] of zs) if(sz>top+16&&sz<innerHeight) ctx.fillText(z,40,sz+8);
     ctx.textAlign='left';ctx.textBaseline='alphabetic';
   }
-  for(const p of PINS) drawPin(p, p.type==='home'?'#ffd54a':(ICON[p.type]||'#ff5252'));
+  labelRects=[]; const PRI={home:0,village:1,portal:2,mob:3,loot:4,spawner:4,mansion:4,outpost:4,monument:4,village2:5};
+  const ordered=[...PINS].sort((a,b)=>(PRI[a.type]??6)-(PRI[b.type]??6));
+  for(const p of ordered) drawPin(p, ICON[p.type]||'#ff5252');
   if(showNether) for(const p of NETHER) drawNether(p);
   if(tap) drawPin(tap,'#4fc3f7',true);
-  ctx.fillStyle='rgba(27,27,27,.88)';ctx.fillRect(0,0,innerWidth,hudBottom());
+  
 }
 // Bedrock slime chunks: seed-independent. seed=(chunkX*0x1f1f1f1f)^chunkZ as uint32, MT19937 first output % 10 == 0.
 const slimeCache=new Map();
@@ -124,20 +152,27 @@ function mtFirst(seed){
   y^=y>>>11; y^=(y<<7)&0x9d2c5680; y^=(y<<15)&0xefc60000; y^=y>>>18; return y>>>0;
 }
 function isSlime(cx,cz){const k=cx+','+cz;let v=slimeCache.get(k);if(v===undefined){v=mtFirst((Math.imul(cx,0x1f1f1f1f)^cz)>>>0)%10===0;slimeCache.set(k,v);}return v;}
-const ICON={village:'#c58f3a',portal:'#b064f0',stronghold:'#8ad',cave:'#9e9e9e',outpost:'#ff8a00',mansion:'#d32f2f',ruins:'#dcc67a',temple:'#dcc67a',monument:'#4ad',spawner:'#e66',mine:'#4fe3ff',loot:'#ffd700',danger:'#f22',cliff:'#e6c47a',mountain:'#bdbdbd',mob:'#8bc34a',landmark:'#ffffff',biome:'#7ccf7c'};
+const ICON={home:'#f2c94c',village:'#d08b3c',portal:'#b06cf0',stronghold:'#8ad',cave:'#9e9e9e',outpost:'#ff7a1a',mansion:'#e03c3c',ruins:'#dcc67a',temple:'#dcc67a',monument:'#3cc8e0',spawner:'#e05050',resource:'#4fe3ff',mine:'#4fe3ff',loot:'#ffd700',danger:'#f22',cliff:'#e6c47a',mountain:'#c8c8c8',mob:'#8bc34a',landmark:'#ffffff',biome:'#7ccf7c'};
+const TYPE_LABEL={home:'Home',village:'Village',portal:'Nether portal',cave:'Cave',outpost:'Pillager outpost',mansion:'Woodland mansion',ruins:'Ruins',monument:'Ocean monument',spawner:'Spawner farm',resource:'Resource',mine:'Resource',loot:'Loot',cliff:'Cliff',mountain:'Mountain',mob:'Animals / mobs',landmark:'Landmark',biome:'Biome'};
+const tagHtml=(p,extra)=>`<span class="tag"><i style="background:${ICON[p.type]||'#ff5252'}"></i>${TYPE_LABEL[p.type]||p.type}</span>${p.biome?`<span class="tag">${p.biome}</span>`:''}${extra||''}`;
 function drawPin(p,color,ring){
   const [sx,sz]=b2s(p.x,p.z);
-  ctx.beginPath();ctx.arc(sx,sz,ring?6:7,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#000';ctx.stroke();
-  if(p.name&&scale>0.35){ctx.font='bold 12px system-ui';ctx.lineWidth=3;ctx.strokeStyle='#000';ctx.strokeText(p.name,sx+10,sz+4);ctx.fillStyle='#fff';ctx.fillText(p.name,sx+10,sz+4);}
+  const r=p.type==='home'?8:(ring?6:6.5);
+  ctx.beginPath();ctx.arc(sx,sz,r+1.5,0,Math.PI*2);ctx.fillStyle='rgba(0,0,0,.55)';ctx.fill();
+  ctx.beginPath();ctx.arc(sx,sz,r,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.lineWidth=1.5;ctx.strokeStyle='rgba(255,255,255,.85)';ctx.stroke();
+  const want=p.name&&!ring&&(scale>0.45||p.type==='home'||p.type==='village'||p.type==='portal');
+  if(want){ctx.font='600 12px -apple-system,system-ui,sans-serif';const w=ctx.measureText(p.name).width;const rect=[sx+9,sz-7,sx+13+w,sz+8];
+    if(!labelRects.some(r=>rect[0]<r[2]&&rect[2]>r[0]&&rect[1]<r[3]&&rect[3]>r[1])){labelRects.push(rect);ctx.lineWidth=3.5;ctx.strokeStyle='rgba(0,0,0,.8)';ctx.lineJoin='round';ctx.strokeText(p.name,sx+11,sz+4);ctx.fillStyle='#fff';ctx.fillText(p.name,sx+11,sz+4);}}
 }
 function hudBottom(){const h=document.getElementById('hud');return h.offsetTop+h.offsetHeight;}
 function biomeAt(x,z){if(!bdata)return '';const px=Math.floor((x-WORLD.x0)/WORLD.blocks_per_px),pz=Math.floor((z-WORLD.z0)/WORLD.blocks_per_px);if(px<0||pz<0||px>=bdata.width||pz>=bdata.height)return '';const i=(pz*bdata.width+px)*4,d=bdata.data;if(d[i+3]===0)return '';const hex='#'+[d[i],d[i+1],d[i+2]].map(v=>v.toString(16).padStart(2,'0')).join('');const b=BIOMES.find(b=>b.color===hex);return b?b.name:'';}
 function drawNether(p){
   const [sx,sz]=b2s(p.x*8,p.z*8);
-  ctx.save();ctx.translate(sx,sz);ctx.rotate(Math.PI/4);ctx.fillStyle='#b064f0';ctx.fillRect(-7,-7,14,14);ctx.lineWidth=2;ctx.strokeStyle='#000';ctx.strokeRect(-7,-7,14,14);ctx.restore();
-  if(scale>0.35){ctx.font='bold 12px system-ui';ctx.lineWidth=3;ctx.strokeStyle='#000';ctx.strokeText(p.name,sx+11,sz+4);ctx.fillStyle='#e6ccff';ctx.fillText(p.name,sx+11,sz+4);}
+  ctx.save();ctx.translate(sx,sz);ctx.rotate(Math.PI/4);ctx.fillStyle='rgba(0,0,0,.55)';ctx.fillRect(-8,-8,16,16);ctx.fillStyle='#b06cf0';ctx.fillRect(-6.5,-6.5,13,13);ctx.lineWidth=1.5;ctx.strokeStyle='rgba(255,255,255,.85)';ctx.strokeRect(-6.5,-6.5,13,13);ctx.restore();
+  if(scale>0.35){ctx.font='600 12px -apple-system,system-ui,sans-serif';ctx.lineWidth=3.5;ctx.strokeStyle='rgba(0,0,0,.8)';ctx.lineJoin='round';ctx.strokeText(p.name,sx+12,sz+4);ctx.fillStyle='#e8d6ff';ctx.fillText(p.name,sx+12,sz+4);}
 }
 const nether=(x,z)=>`Nether ${Math.round(x/8)}, ${Math.round(z/8)}`;
+function setReadout(x,z){const bits=[`<b>${x}, ${z}</b>`,fromHome(x,z)];const b=biomeAt(x,z);if(b)bits.push(b);if(isSlime(Math.floor(x/16),Math.floor(z/16)))bits.push('slime chunk');if(showNether)bits.push(nether(x,z));document.getElementById('coords').innerHTML=bits.join(' · ');}
 function fromHome(x,z){
   const dx=x-HOME.x, dz=z-HOME.z, d=Math.round(Math.hypot(dx,dz));
   const dirs=['N','NE','E','SE','S','SW','W','NW']; const ang=Math.atan2(dx,-dz); // 0 = north
@@ -145,6 +180,7 @@ function fromHome(x,z){
   return d<5?'at Home':`${d} blocks ${dir} of Home`;
 }
 // ---- input ----
+let labelRects=[];
 const pts=new Map(); let last=null, pinchD=0, moved=false, downT=0;
 cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);pts.set(e.pointerId,[e.clientX,e.clientY]);moved=false;downT=Date.now();
   if(pts.size===2){const [a,b]=[...pts.values()];pinchD=Math.hypot(a[0]-b[0],a[1]-b[1]);}});
@@ -160,7 +196,7 @@ function onTap(sx,sz){
   if(showNether) for(const p of NETHER){const [px,pz]=b2s(p.x*8,p.z*8);if(Math.hypot(px-sx,pz-sz)<16){showNetherPin(p);return;}}
   for(const p of PINS){const [px,pz]=b2s(p.x,p.z);if(Math.hypot(px-sx,pz-sz)<16){showPin(p);return;}}
   const [bx,bz]=s2b(sx,sz); tap={x:Math.round(bx),z:Math.round(bz)};
-  document.getElementById('coords').textContent=`X ${tap.x}  Z ${tap.z} · ${fromHome(tap.x,tap.z)}`+(isSlime(Math.floor(tap.x/16),Math.floor(tap.z/16))?' · slime chunk':'')+(biomeAt(tap.x,tap.z)?' · '+biomeAt(tap.x,tap.z):'')+(showNether?' · '+nether(tap.x,tap.z):''); draw();
+  setReadout(tap.x,tap.z); draw();
 }
 // ---- sheet ----
 const sheet=document.getElementById('sheet'), body=document.getElementById('sheetBody');
@@ -168,28 +204,34 @@ function open(html){body.innerHTML=html;sheet.style.display='block';}
 document.getElementById('btnClose').onclick=()=>sheet.style.display='none';
 function photosHtml(p){return p.photos&&p.photos.length?`<div class="photos">${p.photos.map((u,i)=>`<img src="${u}" loading="lazy" data-i="${i}">`).join('')}</div>`:'';}
 function wirePhotos(p){body.querySelectorAll('.photos img').forEach(img=>img.onclick=()=>openLb(p,+img.dataset.i));}
-function showPin(p){open(`<h3>${p.name}</h3><div class="m">${p.type||''} · X ${p.x}, Z ${p.z}${p.y!=null?', Y '+p.y:''}<br>${fromHome(p.x,p.z)}</div>${p.notes?`<p>${p.notes}</p>`:''}${photosHtml(p)}`);wirePhotos(p);cx=p.x;cz=p.z;draw();}
+function showPin(p){open(`<h3>${p.name}</h3><div class="m"><b>${p.x}, ${p.z}</b>${p.y!=null?' · y '+p.y:''} · ${fromHome(p.x,p.z)}</div>${tagHtml(p)}${p.notes?`<p>${p.notes}</p>`:''}${photosHtml(p)}`);wirePhotos(p);cx=p.x;cz=p.z;draw();}
 const lb=document.getElementById('lb'),lbimg=document.getElementById('lbimg'),lbcap=document.getElementById('lbcap');let lbp=null,lbi=0;
 function openLb(p,i){lbp=p;lbi=i;lbimg.src=p.photos[i];lbcap.textContent=`${p.name} · ${i+1}/${p.photos.length}`;lb.style.display='flex';}
 function lbStep(d){if(!lbp)return;lbi=(lbi+d+lbp.photos.length)%lbp.photos.length;openLb(lbp,lbi);}
 lb.querySelector('.nav.l').onclick=e=>{e.stopPropagation();lbStep(-1);};lb.querySelector('.nav.r').onclick=e=>{e.stopPropagation();lbStep(1);};
 lb.onclick=()=>lb.style.display='none';
 let lbx=null;lb.addEventListener('pointerdown',e=>lbx=e.clientX);lb.addEventListener('pointerup',e=>{if(lbx!=null&&Math.abs(e.clientX-lbx)>40){lbStep(e.clientX<lbx?1:-1);setTimeout(()=>lb.style.display='flex',0);}lbx=null;});
-function showNetherPin(p){open(`<h3>${p.name}</h3><div class="m">Nether · X ${p.x}, Z ${p.z}${p.y!=null?', Y '+p.y:''}<br>Overworld equivalent X ${p.x*8}, Z ${p.z*8} · ${fromHome(p.x*8,p.z*8)}</div>${p.notes?`<p>${p.notes}</p>`:''}${photosHtml(p)}`);wirePhotos(p);cx=p.x*8;cz=p.z*8;draw();}
-const tkey=document.createElement('div');tkey.id='tkey';tkey.style.cssText='position:fixed;left:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));background:var(--panel);backdrop-filter:blur(8px);border-radius:12px;padding:8px 10px;font-size:12px;display:none;z-index:2';
-tkey.innerHTML='<div><i style="display:inline-block;width:14px;height:14px;border-radius:3px;background:#ff3030;opacity:.7;vertical-align:middle"></i> rough / steep open ground</div><div><i style="display:inline-block;width:14px;height:14px;border-radius:3px;background:repeating-linear-gradient(45deg,#287828 0 2px,transparent 2px 5px);vertical-align:middle"></i> tree canopy (terrain hidden)</div><div style="color:#999">streaks = the map\'s own slope shading, exaggerated</div>';document.body.appendChild(tkey);
+function showNetherPin(p){open(`<h3>${p.name}</h3><div class="m">Nether <b>${p.x}, ${p.z}</b>${p.y!=null?' · y '+p.y:''}<br>Overworld ${p.x*8}, ${p.z*8} · ${fromHome(p.x*8,p.z*8)}</div>${tagHtml(p,'<span class="tag">Nether</span>')}${p.notes?`<p>${p.notes}</p>`:''}${photosHtml(p)}`);wirePhotos(p);cx=p.x*8;cz=p.z*8;draw();}
+const tkey=document.getElementById('tkey');
 document.getElementById('btnTerrain').onclick=e=>{showTerrain=!showTerrain;e.target.classList.toggle('on',showTerrain);tkey.style.display=showTerrain?'block':'none';draw();};
 document.getElementById('btnNether').onclick=e=>{showNether=!showNether;e.target.classList.toggle('on',showNether);draw();};
 document.getElementById('btnPins').onclick=()=>{
-  const items=PINS.map((p,i)=>`<li data-i="${i}"><span>${p.name}</span><span class="m">${fromHome(p.x,p.z)}</span></li>`).join('')
-    +(showNether?NETHER.map((p,i)=>`<li data-n="${i}"><span style="color:#e6ccff">⟡ ${p.name}</span><span class="m">Nether ${p.x}, ${p.z}</span></li>`).join(''):'');
-  open(`<h3>Go to</h3><div class="row"><input id="gx" inputmode="numeric" placeholder="X"><input id="gz" inputmode="numeric" placeholder="Z"><button class="pill" id="go">Go</button></div><ul id="pins">${items}</ul>`);
-  document.getElementById('go').onclick=()=>{const x=+gx.value,z=+gz.value;if(isNaN(x)||isNaN(z))return;tap={x,z};cx=x;cz=z;document.getElementById('coords').textContent=`X ${x}  Z ${z} · ${fromHome(x,z)}`;sheet.style.display='none';draw();};
-  body.querySelectorAll('#pins li').forEach(li=>li.onclick=()=>li.dataset.n!=null?showNetherPin(NETHER[+li.dataset.n]):showPin(PINS[+li.dataset.i]));
+  const order=['home','village','portal','mob','loot','resource','mine','spawner','mansion','outpost','monument','ruins','cave','cliff','mountain','landmark','biome'];
+  const groups={};PINS.forEach((p,i)=>{(groups[p.type]=groups[p.type]||[]).push([p,i]);});
+  const dist=p=>Math.hypot(p.x-HOME.x,p.z-HOME.z);
+  const li=(p,i,n)=>`<li data-${n!=null?'n':'i'}="${n!=null?n:i}"><i style="background:${n!=null?'#b06cf0':(ICON[p.type]||'#ff5252')}"></i><span class="n">${p.name}</span><span class="m">${n!=null?'Nether '+p.x+', '+p.z:fromHome(p.x,p.z)}</span></li>`;
+  let items='';
+  for(const t of order){if(!groups[t])continue;items+=`<li class="sec">${TYPE_LABEL[t]||t}</li>`+groups[t].sort((a,b)=>dist(a[0])-dist(b[0])).map(([p,i])=>li(p,i)).join('');}
+  if(showNether&&NETHER.length)items+=`<li class="sec">Nether</li>`+NETHER.map((p,i)=>li(p,null,i)).join('');
+  open(`<h3>Go to</h3><div class="row"><input id="gx" inputmode="numeric" placeholder="X"><input id="gz" inputmode="numeric" placeholder="Z"><button class="pill" id="go">Go</button></div><input id="search" placeholder="Search pins" autocomplete="off"><ul id="pins">${items}</ul>`);
+  document.getElementById('go').onclick=()=>{const x=+gx.value,z=+gz.value;if(isNaN(x)||isNaN(z))return;tap={x,z};cx=x;cz=z;setReadout(x,z);sheet.style.display='none';draw();};
+  const rows=[...body.querySelectorAll('#pins li')];
+  rows.forEach(li=>{if(!li.classList.contains('sec'))li.onclick=()=>li.dataset.n!=null?showNetherPin(NETHER[+li.dataset.n]):showPin(PINS[+li.dataset.i]);});
+  document.getElementById('search').oninput=e=>{const q=e.target.value.trim().toLowerCase();rows.forEach(li=>{if(li.classList.contains('sec')){li.style.display=q?'none':'';return;}const p=li.dataset.n!=null?NETHER[+li.dataset.n]:PINS[+li.dataset.i];li.style.display=(!q||(p.name+' '+(p.biome||'')+' '+(p.notes||'')).toLowerCase().includes(q))?'':'none';});};
 };
 document.getElementById('btnHome').onclick=()=>{cx=HOME.x;cz=HOME.z;draw();};
 document.getElementById('btnGrid').onclick=e=>{showGrid=!showGrid;e.target.classList.toggle('on',showGrid);draw();};
-const key=document.getElementById('key'); key.innerHTML=BIOMES.map(b=>`<div><i style="background:${b.color}"></i>${b.name}</div>`).join('')+'<div class="m" style="color:#999">best guess from map colours</div>';
+const key=document.getElementById('key'); key.innerHTML=BIOMES.map(b=>`<div><i style="background:${b.color}"></i>${b.name}</div>`).join('')+'<div style="color:var(--muted)">best guess from map colours</div>';
 document.getElementById('btnBiomes').onclick=e=>{showBiomes=!showBiomes;e.target.classList.toggle('on',showBiomes);key.style.display=showBiomes?'block':'none';draw();};
 document.getElementById('btnSlime').onclick=e=>{showSlime=!showSlime;e.target.classList.toggle('on',showSlime);draw();};
 img.onload=draw; resize();

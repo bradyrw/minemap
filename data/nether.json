@@ -1,25 +1,27 @@
 [
  {
-  "name": "North portal (Nether side)",
+  "name": "North cabin portal",
   "type": "portal",
   "x": -22,
   "y": 60,
   "z": -218,
-  "notes": "Comes out in a warped forest — no hostile spawns except endermen. Overworld side is the North cabin at (-201, -1667). Open warped-forest floor around (-22, -243) with a basalt pillar nearby.",
+  "notes": "Nether side of the North cabin. Warped forest: no hostiles except endermen. Open floor around (-22, -243) with a basalt pillar. Start of the basalt-deltas search.",
   "photos": [
    "img/poi/north-portal-nether-side/6c60bc77.jpg",
    "img/poi/north-portal-nether-side/c11b1696.jpg"
-  ]
+  ],
+  "biome": "Warped forest"
  },
  {
-  "name": "North portal 2 (Nether side)",
+  "name": "Snowy portal",
   "type": "portal",
   "x": -258,
   "y": 89,
   "z": -256,
-  "notes": "Crimson forest — hoglins and piglins here, bring gold armour. Overworld side at (-2025, 102, -2014).",
+  "notes": "Nether side of the snowy north portal. Crimson forest: hoglins and piglins — wear one gold piece.",
   "photos": [
    "img/poi/north-portal-2-nether-side/c18a42d0.jpg"
-  ]
+  ],
+  "biome": "Crimson forest"
  }
 ]

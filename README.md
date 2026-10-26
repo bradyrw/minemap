@@ -7,7 +7,7 @@ Brady's annotated Minecraft (Bedrock, iPhone) world map. Static site on GitHub P
 - `img/world.png` — stitched world, 4 blocks/px. Level-3 tiles fill in under missing level-2s; level-4 maps (`img/tiles/l4_*.png`, 16 blocks/px, listed in `data/world.json` → `level4` with their frame origin in blocks) fill anything still empty. Image origin is (x0,z0) in world.json; the 8×4 level-2 wall sits at z −1088 inside it.
 - `data/world.json` — world image placement (`x0`,`z0`, blocks per px) and which screenshot sits in which frame.
 - `data/nether.json` — Nether pins `{name,type,x,y,z,notes}` in NETHER coordinates; the viewer's Nether toggle draws them at ×8 on the Overworld map and adds Nether coords to the tap readout.
-- `data/pins.json` — points of interest: `{name,type,x,y,z,notes,photos[]}`; photos live in `img/poi/<slug>/` (≤1600px JPEG) and show as a strip in the pin sheet with a swipeable lightbox. One pin per place — several screenshots of the same village go on the one pin. Convention: `notes` starts with the biome (Brady's rule — always note the biome). Types: home, village, portal, stronghold, cave, outpost, mansion, ruins, temple, monument, spawner, mine, loot, danger, cliff, mountain, mob, landmark, biome.
+- `data/pins.json` — points of interest: `{name,type,x,y,z,notes,photos[]}`; photos live in `img/poi/<slug>/` (≤1600px JPEG) and show as a strip in the pin sheet with a swipeable lightbox. One pin per place — several screenshots of the same village go on the one pin. Each pin has a `biome` field (Brady's rule — always record the biome) shown as a tag; `notes` is one or two plain sentences. Pin names: `Thing (qualifier)` when there are several of a kind, e.g. `Sulfur springs (pool)`. Types: home, village, portal, stronghold, cave, outpost, mansion, ruins, temple, monument, spawner, mine, loot, danger, cliff, mountain, mob, landmark, biome.
 - `img/tiles/` — cleaned 128×128 map tiles cropped from screenshots.
 - `img/wall.png` — the map wall photographed and warped flat (tools/wallfill.py); fills pixels the screenshot HUD covered.
 - `img/relief.png` + `img/topo.png` (tools/topo.py) — Terrain toggle. The map's own slope shading (each pixel lit/darkened vs the pixel north of it) exaggerated on open ground, plus red = rough/steep open ground, green hatch = tree canopy. A true height field was attempted (integrating the shading north→south, calibrated against pin Y values) and does NOT work on these angled/JPEG tiles — correlation with pin heights ≈ 0 — so no elevations are shown. Flat, nearest-neighbour map screenshots would make a real DEM possible.
@@ -25,6 +25,9 @@ Brady's annotated Minecraft (Bedrock, iPhone) world map. Static site on GitHub P
 - Maps are grid-aligned: a map of size S (128·2^level) covers `S·k − 64 … S·k + S − 65` on both axes. Level-4 (S=2048) frames therefore start at −4160, −2112, −64 …
 - Map wall = 8×4 level-2 maps, top-left frame starts at (x −4160, z −1088). Frame (fx,fy) top-left = (−4160 + 512·fx, −1088 + 512·fy).
 - Home: round house at (−2428, 63, −449).
+
+## Map frames (for better screenshots)
+Frames are named relative to Home's level-2 map (x −2560…−2049, z −576…−65 — Home sits at its SE corner). "south 1, east 2" = the frame whose top-left is (−2560 + 2·512, −576 + 1·512). Wall grid (fx,fy) ↔ Home-relative: Home frame is wall (3,1), so east = fx−3, south = fy−1.
 
 ## Workflow
 Brady uploads screenshots in a Claude session → `place.py` (tiles) / read coords off POI shots → edit `data/pins.json` → `compose.py` → `biomes.py` → push to `main` → Pages redeploys.
