@@ -64,7 +64,7 @@ canvas{display:block;image-rendering:pixelated}
 <div id="map"><canvas id="c"></canvas></div>
 <div id="hud">
   <div id="top">
-    <div id="brand">minemap</div>
+    <div id="brand" title="build 4">minemap</div>
     <div id="coords">tap the map for coordinates</div>
     <button class="pill icon" id="btnHome" title="Center on Home">⌂</button>
     <button class="pill" id="btnPins">Pins</button>
@@ -106,7 +106,8 @@ function resize(){dpr=window.devicePixelRatio||1;cv.width=innerWidth*dpr;cv.heig
 addEventListener('resize',resize);
 const b2s=(x,z)=>[(x-cx)*scale+innerWidth/2,(z-cz)*scale+innerHeight/2];
 const s2b=(sx,sz)=>[(sx-innerWidth/2)/scale+cx,(sz-innerHeight/2)/scale+cz];
-function draw(){
+function draw(){try{drawInner();}catch(e){console.error(e);const el=document.getElementById('coords');el.textContent='draw error: '+e.message;}}
+function drawInner(){
   ctx.setTransform(dpr,0,0,dpr,0,0); ctx.fillStyle='#14161a'; ctx.fillRect(0,0,innerWidth,innerHeight);
   ctx.imageSmoothingEnabled = scale*WORLD.blocks_per_px < 1;
   const [ox,oz]=b2s(WORLD.x0,WORLD.z0); const s=WORLD.blocks_per_px*scale;
@@ -125,7 +126,7 @@ function draw(){
     }
   }
   if(showGrid){ctx.strokeStyle='rgba(255,255,255,.25)';ctx.lineWidth=1;
-    const step=512, gx0=Math.floor(WORLD.x0/step)*step, gz0=Math.floor(WORLD.z0/step)*step;
+    const step=512, gx0=Math.floor((WORLD.x0+64)/step)*step-64, gz0=Math.floor((WORLD.z0+64)/step)*step-64;
     const xs=[],zs=[];
     for(let x=gx0;x<=WORLD.x0+WORLD.w*WORLD.blocks_per_px;x+=step){const [sx]=b2s(x,0);ctx.beginPath();ctx.moveTo(sx,0);ctx.lineTo(sx,innerHeight);ctx.stroke();xs.push([x,sx]);}
     for(let z=gz0;z<=WORLD.z0+WORLD.h*WORLD.blocks_per_px;z+=step){const [,sz]=b2s(0,z);ctx.beginPath();ctx.moveTo(0,sz);ctx.lineTo(innerWidth,sz);ctx.stroke();zs.push([z,sz]);}
@@ -186,7 +187,8 @@ function drawPin(p,color,ring){
   if(want){ctx.font='600 12px -apple-system,system-ui,sans-serif';const w=ctx.measureText(p.name).width;const rect=[sx+9,sz-7,sx+13+w,sz+8];
     if(!labelRects.some(r=>rect[0]<r[2]&&rect[2]>r[0]&&rect[1]<r[3]&&rect[3]>r[1])){labelRects.push(rect);ctx.lineWidth=3.5;ctx.strokeStyle='rgba(0,0,0,.8)';ctx.lineJoin='round';ctx.strokeText(p.name,sx+11,sz+4);ctx.fillStyle='#fff';ctx.fillText(p.name,sx+11,sz+4);}}
 }
-function chip(t,x,y,col){const w=ctx.measureText(t).width+10;ctx.fillStyle='rgba(20,22,26,.85)';ctx.beginPath();ctx.roundRect(x-w/2,y-9,w,18,9);ctx.fill();ctx.fillStyle=col;ctx.fillText(t,x,y);}
+function rrect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arc(x+w-r,y+r,r,-Math.PI/2,0);ctx.lineTo(x+w,y+h-r);ctx.arc(x+w-r,y+h-r,r,0,Math.PI/2);ctx.lineTo(x+r,y+h);ctx.arc(x+r,y+h-r,r,Math.PI/2,Math.PI);ctx.lineTo(x,y+r);ctx.arc(x+r,y+r,r,Math.PI,Math.PI*1.5);ctx.closePath();}
+function chip(t,x,y,col){ctx.font='600 11px -apple-system,system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';const w=ctx.measureText(t).width+12;ctx.fillStyle='rgba(20,22,26,.88)';rrect(x-w/2,y-10,w,20,10);ctx.fill();ctx.strokeStyle='rgba(255,255,255,.25)';ctx.lineWidth=1;ctx.stroke();ctx.fillStyle=col;ctx.fillText(t,x,y+0.5);}
 function hudBottom(){const h=document.getElementById('hud');return h.offsetTop+h.offsetHeight;}
 function biomeAt(x,z){if(!bdata)return '';const px=Math.floor((x-WORLD.x0)/WORLD.blocks_per_px),pz=Math.floor((z-WORLD.z0)/WORLD.blocks_per_px);if(px<0||pz<0||px>=bdata.width||pz>=bdata.height)return '';const i=(pz*bdata.width+px)*4,d=bdata.data;if(d[i+3]===0)return '';const hex='#'+[d[i],d[i+1],d[i+2]].map(v=>v.toString(16).padStart(2,'0')).join('');const b=BIOMES.find(b=>b.color===hex);return b?b.name:'';}
 function drawNether(p){
