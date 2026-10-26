@@ -26,8 +26,11 @@ Brady's annotated Minecraft (Bedrock, iPhone) world map. Static site on GitHub P
 - Map wall = 8×4 level-2 maps, top-left frame starts at (x −4160, z −1088). Frame (fx,fy) top-left = (−4160 + 512·fx, −1088 + 512·fy).
 - Home: round house at (−2428, 63, −449).
 
-## Map frames (for better screenshots)
-Frames are named relative to Home's level-2 map (x −2560…−2049, z −576…−65 — Home sits at its SE corner). "south 1, east 2" = the frame whose top-left is (−2560 + 2·512, −576 + 1·512). Wall grid (fx,fy) ↔ Home-relative: Home frame is wall (3,1), so east = fx−3, south = fy−1.
+## Map frames and naming
+A map at level L is 128·2^L blocks square and sits on a fixed grid: frame k covers `S·k − 64 … S·k + S − 65` (S = 512 / 1024 / 2048 for L2 / L3 / L4). Names are relative to the frame that contains Home *at that level*: `L2 H`, `L2 S1E1`, `L3 N1`, `L4 W1`. The level prefix matters because `L2 S1E1` and `L3 S1E1` are different squares.
+- Home's frames: L2 x −2624…−2113, z −576…−65 (wall grid 3,1) · L3 x −3136…−2113, z −1088…−65 · L4 x −4160…−2113, z −2112…−65.
+- Viewer: the **Frames** button cycles L2 → L3 → L4. Green = mapped at that level (or finer), orange = only a coarser map here, grey = nothing. Tap a frame for its bounds, centre, what to name it and how to make it. `tools/frames.py` rebuilds `data/frames.json` from `data/source.npy` (written by compose.py: 2/3/4 = map level per pixel, 9 = wall-photo fill).
+- To make a map for a frame: stand anywhere inside it, craft an empty map (locks to the frame), zoom it L times, fly it, then screenshot it held flat.
 
 ## Workflow
 Brady uploads screenshots in a Claude session → `place.py` (tiles) / read coords off POI shots → edit `data/pins.json` → `compose.py` → `biomes.py` → push to `main` → Pages redeploys.

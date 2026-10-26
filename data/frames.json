@@ -1,0 +1,648 @@
+{
+"L2": [
+{
+"name": "N3W3",
+"x0": -4160,
+"z0": -2112,
+"size": 512,
+"explored": 0.86,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N3W2",
+"x0": -3648,
+"z0": -2112,
+"size": 512,
+"explored": 0.58,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N3W1",
+"x0": -3136,
+"z0": -2112,
+"size": 512,
+"explored": 0.59,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N3",
+"x0": -2624,
+"z0": -2112,
+"size": 512,
+"explored": 0.86,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N3E1",
+"x0": -2112,
+"z0": -2112,
+"size": 512,
+"explored": 0.48,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N3E2",
+"x0": -1600,
+"z0": -2112,
+"size": 512,
+"explored": 0.01,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N3E3",
+"x0": -1088,
+"z0": -2112,
+"size": 512,
+"explored": 0.01,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N3E4",
+"x0": -576,
+"z0": -2112,
+"size": 512,
+"explored": 0.53,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N2W3",
+"x0": -4160,
+"z0": -1600,
+"size": 512,
+"explored": 1.0,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N2W2",
+"x0": -3648,
+"z0": -1600,
+"size": 512,
+"explored": 0.99,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N2W1",
+"x0": -3136,
+"z0": -1600,
+"size": 512,
+"explored": 0.98,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N2",
+"x0": -2624,
+"z0": -1600,
+"size": 512,
+"explored": 1.0,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N2E1",
+"x0": -2112,
+"z0": -1600,
+"size": 512,
+"explored": 0.38,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N2E2",
+"x0": -1600,
+"z0": -1600,
+"size": 512,
+"explored": 0.03,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N2E3",
+"x0": -1088,
+"z0": -1600,
+"size": 512,
+"explored": 0.47,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N2E4",
+"x0": -576,
+"z0": -1600,
+"size": 512,
+"explored": 0.27,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N1W3",
+"x0": -4160,
+"z0": -1088,
+"size": 512,
+"explored": 1.0,
+"fine": 0.88,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "N1W2",
+"x0": -3648,
+"z0": -1088,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "N1W1",
+"x0": -3136,
+"z0": -1088,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "N1",
+"x0": -2624,
+"z0": -1088,
+"size": 512,
+"explored": 1.0,
+"fine": 0.88,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "N1E1",
+"x0": -2112,
+"z0": -1088,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "N1E2",
+"x0": -1600,
+"z0": -1088,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "N1E3",
+"x0": -1088,
+"z0": -1088,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "N1E4",
+"x0": -576,
+"z0": -1088,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "W3",
+"x0": -4160,
+"z0": -576,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "W2",
+"x0": -3648,
+"z0": -576,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "W1",
+"x0": -3136,
+"z0": -576,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "H",
+"x0": -2624,
+"z0": -576,
+"size": 512,
+"explored": 1.0,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "E1",
+"x0": -2112,
+"z0": -576,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "E2",
+"x0": -1600,
+"z0": -576,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "E3",
+"x0": -1088,
+"z0": -576,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "E4",
+"x0": -576,
+"z0": -576,
+"size": 512,
+"explored": 1.0,
+"fine": 0.87,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "S1W3",
+"x0": -4160,
+"z0": -64,
+"size": 512,
+"explored": 1.0,
+"fine": 0.88,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "S1W2",
+"x0": -3648,
+"z0": -64,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "S1W1",
+"x0": -3136,
+"z0": -64,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "S1",
+"x0": -2624,
+"z0": -64,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "S1E1",
+"x0": -2112,
+"z0": -64,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.11,
+"status": "have"
+},
+{
+"name": "S1E2",
+"x0": -1600,
+"z0": -64,
+"size": 512,
+"explored": 1.0,
+"fine": 0.88,
+"wall": 0.12,
+"status": "have"
+},
+{
+"name": "S1E3",
+"x0": -1088,
+"z0": -64,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.11,
+"status": "have"
+},
+{
+"name": "S1E4",
+"x0": -576,
+"z0": -64,
+"size": 512,
+"explored": 1.0,
+"fine": 0.86,
+"wall": 0.14,
+"status": "have"
+},
+{
+"name": "S2W3",
+"x0": -4160,
+"z0": 448,
+"size": 512,
+"explored": 1.0,
+"fine": 0.88,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "S2W2",
+"x0": -3648,
+"z0": 448,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "S2W1",
+"x0": -3136,
+"z0": 448,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.05,
+"status": "have"
+},
+{
+"name": "S2",
+"x0": -2624,
+"z0": 448,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.05,
+"status": "have"
+},
+{
+"name": "S2E1",
+"x0": -2112,
+"z0": 448,
+"size": 512,
+"explored": 1.0,
+"fine": 0.87,
+"wall": 0.13,
+"status": "have"
+},
+{
+"name": "S2E2",
+"x0": -1600,
+"z0": 448,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.11,
+"status": "have"
+},
+{
+"name": "S2E3",
+"x0": -1088,
+"z0": 448,
+"size": 512,
+"explored": 1.0,
+"fine": 0.89,
+"wall": 0.11,
+"status": "have"
+},
+{
+"name": "S2E4",
+"x0": -576,
+"z0": 448,
+"size": 512,
+"explored": 1.0,
+"fine": 0.88,
+"wall": 0.12,
+"status": "have"
+}
+],
+"L3": [
+{
+"name": "N1W1",
+"x0": -4160,
+"z0": -2112,
+"size": 1024,
+"explored": 0.86,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N1",
+"x0": -3136,
+"z0": -2112,
+"size": 1024,
+"explored": 0.86,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N1E1",
+"x0": -2112,
+"z0": -2112,
+"size": 1024,
+"explored": 0.22,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "N1E2",
+"x0": -1088,
+"z0": -2112,
+"size": 1024,
+"explored": 0.32,
+"fine": 0.0,
+"wall": 0.0,
+"status": "coarse"
+},
+{
+"name": "W1",
+"x0": -4160,
+"z0": -1088,
+"size": 1024,
+"explored": 1.0,
+"fine": 1.0,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "H",
+"x0": -3136,
+"z0": -1088,
+"size": 1024,
+"explored": 1.0,
+"fine": 1.0,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "E1",
+"x0": -2112,
+"z0": -1088,
+"size": 1024,
+"explored": 1.0,
+"fine": 1.0,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "E2",
+"x0": -1088,
+"z0": -1088,
+"size": 1024,
+"explored": 1.0,
+"fine": 1.0,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "S1W1",
+"x0": -4160,
+"z0": -64,
+"size": 1024,
+"explored": 1.0,
+"fine": 1.0,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "S1",
+"x0": -3136,
+"z0": -64,
+"size": 1024,
+"explored": 1.0,
+"fine": 0.98,
+"wall": 0.02,
+"status": "have"
+},
+{
+"name": "S1E1",
+"x0": -2112,
+"z0": -64,
+"size": 1024,
+"explored": 1.0,
+"fine": 0.88,
+"wall": 0.12,
+"status": "have"
+},
+{
+"name": "S1E2",
+"x0": -1088,
+"z0": -64,
+"size": 1024,
+"explored": 1.0,
+"fine": 0.88,
+"wall": 0.12,
+"status": "have"
+}
+],
+"L4": [
+{
+"name": "H",
+"x0": -4160,
+"z0": -2112,
+"size": 2048,
+"explored": 0.93,
+"fine": 0.93,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "E1",
+"x0": -2112,
+"z0": -2112,
+"size": 2048,
+"explored": 0.64,
+"fine": 0.64,
+"wall": 0.0,
+"status": "have"
+},
+{
+"name": "S1",
+"x0": -4160,
+"z0": -64,
+"size": 2048,
+"explored": 0.5,
+"fine": 0.49,
+"wall": 0.01,
+"status": "partial"
+},
+{
+"name": "S1E1",
+"x0": -2112,
+"z0": -64,
+"size": 2048,
+"explored": 0.5,
+"fine": 0.44,
+"wall": 0.06,
+"status": "partial"
+}
+]
+}

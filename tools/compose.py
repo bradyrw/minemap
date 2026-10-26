@@ -6,15 +6,17 @@ X0,Z0=-4160,-2112   # world image top-left in blocks; 4 blocks per px
 W,H=1024,768
 WALL_Z=-1088        # the 8x4 level-2 wall starts here; wall frame (fx,fy) -> px (fx*128, (WALL_Z-Z0)//4 + fy*128)
 canvas=np.zeros((H,W,4),np.uint8)
+src=np.zeros((H,W),np.uint8)   # 2/3/4 = map level the pixel came from, 9 = wall photo fill
 def paper(img):
     b,g,r=[img[...,i].astype(int) for i in range(3)]
     return (r>170)&(r<235)&(g>150)&(g<215)&(b>100)&(b<170)&(r-b>40)&(r-b<90)&(abs(r-g)<35)
 OY=(WALL_Z-Z0)//4
-def put(img,x,y,explored=None):
+def put(img,x,y,explored=None,level=0):
     h,w=img.shape[:2]
     if explored is None: explored=np.ones((h,w),bool)
     region=canvas[y:y+h,x:x+w]
     region[explored]=np.concatenate([img[explored],np.full((explored.sum(),1),255,np.uint8)],1)
+    if level: src[y:y+h,x:x+w][explored]=level
 world=json.load(open(os.path.join(D,'world.json')))
 def hudmask(t):
     m=np.zeros((128,128),bool); m[0:9,36:92]=True; m[121:128,52:78]=True; m[127:128,:]=True; m[61:68,61:68]=True
@@ -34,11 +36,11 @@ for n,(fx,fy) in world['level3'].items():
     m=cv2.erode(m.astype(np.uint8),np.ones((5,5),np.uint8)).astype(bool)  # trim ragged edge
     if n!='9484': m[:]=True
     else: m[200:]=False
-    put(up,fx*128,OY+fy*128,m)
+    put(up,fx*128,OY+fy*128,m,3)
 l2=json.load(open(os.path.join(D,'assign.json')))
 for n,(fx,fy) in l2.items():
     t=cv2.imread(os.path.join(T,f'rect_IMG_{n}.png'))
-    put(t,fx*128,OY+fy*128,~hudmask(t))
+    put(t,fx*128,OY+fy*128,~hudmask(t),2)
 # fill what the HUD covered (and anything else still empty) from the flattened wall photo, img/wall.png
 wp=os.path.join(R,'img','wall.png')
 if os.path.exists(wp):
@@ -46,7 +48,7 @@ if os.path.exists(wp):
     if w.shape[0]!=H:   # wall.png is wall-sized (1024x512); pad to world
         full=np.zeros((H,W,4),np.uint8); full[OY:OY+w.shape[0],:w.shape[1]]=w; w=full
     hole=(canvas[...,3]==0)&(w[...,3]>0)
-    canvas[hole]=np.concatenate([w[hole][:,:3],np.full((hole.sum(),1),255,np.uint8)],1)
+    canvas[hole]=np.concatenate([w[hole][:,:3],np.full((hole.sum(),1),255,np.uint8)],1); src[hole]=9
 # level-4 maps last, 16 blocks/px upscaled 4x, only where nothing better exists
 for name,(bx,bz) in world.get('level4',{}).items():
     t=cv2.imread(os.path.join(T,f'l4_{name}.png')); up=cv2.resize(t,(512,512),interpolation=cv2.INTER_NEAREST)
@@ -60,7 +62,7 @@ for name,(bx,bz) in world.get('level4',{}).items():
     m=~big; m=cv2.erode(m.astype(np.uint8),np.ones((5,5),np.uint8)).astype(bool)
     px,pz=(bx-X0)//4,(bz-Z0)//4
     sub=canvas[pz:pz+512,px:px+512]; hole=(sub[...,3]==0)&m[:sub.shape[0],:sub.shape[1]]
-    sub[hole]=np.concatenate([up[:sub.shape[0],:sub.shape[1]][hole],np.full((hole.sum(),1),255,np.uint8)],1)
-cv2.imwrite(os.path.join(R,'img','world.png'),canvas)
+    sub[hole]=np.concatenate([up[:sub.shape[0],:sub.shape[1]][hole],np.full((hole.sum(),1),255,np.uint8)],1); src[pz:pz+512,px:px+512][hole]=4
+cv2.imwrite(os.path.join(R,'img','world.png'),canvas); np.save(os.path.join(D,'source.npy'),src)
 world['level2']=l2; world.update({'x0':X0,'z0':Z0,'w':W,'h':H}); json.dump(world,open(os.path.join(D,'world.json'),'w'),indent=1)
 print('explored px',int((canvas[...,3]>0).sum()))
