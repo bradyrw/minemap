@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#14161a">
 <title>minemap</title>
 <style>
-:root{--bg:#14161a;--panel:rgba(22,24,29,.88);--panel2:rgba(34,37,44,.9);--fg:#ececec;--muted:#9a9ea8;--accent:#f2c94c;--line:rgba(255,255,255,.08);--r:14px;
+:root{--sab:env(safe-area-inset-bottom,0px);--bg:#14161a;--panel:rgba(22,24,29,.88);--panel2:rgba(34,37,44,.9);--fg:#ececec;--muted:#9a9ea8;--accent:#f2c94c;--line:rgba(255,255,255,.08);--r:14px;
   --font:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);overflow:hidden;overscroll-behavior:none}
@@ -142,12 +142,26 @@ function draw(){
     for(const f of fr){const [sx,sz]=b2s(f.x0,f.z0);const sw=f.size*scale;if(sx+sw<0||sz+sw<0||sx>innerWidth||sz>innerHeight)continue;
       ctx.fillStyle=COL[f.status];ctx.fillRect(sx,sz,sw,sw);ctx.strokeStyle=f.name==='H'?'#f2c94c':'rgba(255,255,255,.55)';ctx.lineWidth=f.name==='H'?2:1;ctx.strokeRect(sx+.5,sz+.5,sw-1,sw-1);
       if(sw>40){const lab=`L${frameLevel} ${f.name}`;ctx.lineWidth=3;ctx.strokeStyle='rgba(0,0,0,.8)';ctx.lineJoin='round';ctx.strokeText(lab,sx+sw/2,sz+sw/2);ctx.fillStyle=f.status==='have'?'#bff5d0':f.status==='partial'?'#ffe28a':f.status==='coarse'?'#ffc3a0':'#ddd';ctx.fillText(lab,sx+sw/2,sz+sw/2);}}
+    // coordinate of every frame edge, floating on the line at screen centre
+    const S=128*Math.pow(2,frameLevel), midY=hudBottom()+(innerHeight-hudBottom())*0.62, midX=innerWidth*0.38;
+    ctx.font='600 11px -apple-system,system-ui,sans-serif';
+    const x0=Math.floor((s2b(0,0)[0]+64)/S)*S-64, x1=s2b(innerWidth,0)[0];
+    for(let x=x0;x<=x1;x+=S){const [sx]=b2s(x,0);if(sx<46||sx>innerWidth)continue;chip(`x ${x}`,sx,midY,'#fff');}
+    ctx.font='600 11px -apple-system,system-ui,sans-serif';
+    const z0=Math.floor((s2b(0,0)[1]+64)/S)*S-64, z1=s2b(0,innerHeight)[1];
+    for(let z=z0;z<=z1;z+=S){const [,sz]=b2s(0,z);if(sz<hudBottom()+10||sz>innerHeight)continue;chip(`z ${z}`,midX,sz,'#fff');}
     ctx.textAlign='left';ctx.textBaseline='alphabetic';}
   labelRects=[]; const PRI={home:0,village:1,portal:2,mob:3,loot:4,spawner:4,mansion:4,outpost:4,monument:4,village2:5};
   const ordered=[...PINS].sort((a,b)=>(PRI[a.type]??6)-(PRI[b.type]??6));
   for(const p of ordered) drawPin(p, ICON[p.type]||'#ff5252');
   if(showNether) for(const p of NETHER) drawNether(p);
   if(tap) drawPin(tap,'#4fc3f7',true);
+  // compass: N is −z (up), E is +x (right)
+  const cxp=innerWidth-30, czp=innerHeight-44;
+  ctx.fillStyle='rgba(20,22,26,.8)';ctx.beginPath();ctx.arc(cxp,czp,22,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(cxp,czp-16);ctx.lineTo(cxp,czp+16);ctx.moveTo(cxp-16,czp);ctx.lineTo(cxp+16,czp);ctx.stroke();
+  ctx.fillStyle='#f2c94c';ctx.beginPath();ctx.moveTo(cxp,czp-18);ctx.lineTo(cxp-4,czp-8);ctx.lineTo(cxp+4,czp-8);ctx.closePath();ctx.fill();
+  ctx.font='700 9px -apple-system,system-ui,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#fff';ctx.fillText('N  −z',cxp,czp-30);ctx.fillStyle='#bbb';ctx.fillText('E +x',cxp,czp+30);ctx.textAlign='left';ctx.textBaseline='alphabetic';
   
 }
 // Bedrock slime chunks: seed-independent. seed=(chunkX*0x1f1f1f1f)^chunkZ as uint32, MT19937 first output % 10 == 0.
@@ -172,6 +186,7 @@ function drawPin(p,color,ring){
   if(want){ctx.font='600 12px -apple-system,system-ui,sans-serif';const w=ctx.measureText(p.name).width;const rect=[sx+9,sz-7,sx+13+w,sz+8];
     if(!labelRects.some(r=>rect[0]<r[2]&&rect[2]>r[0]&&rect[1]<r[3]&&rect[3]>r[1])){labelRects.push(rect);ctx.lineWidth=3.5;ctx.strokeStyle='rgba(0,0,0,.8)';ctx.lineJoin='round';ctx.strokeText(p.name,sx+11,sz+4);ctx.fillStyle='#fff';ctx.fillText(p.name,sx+11,sz+4);}}
 }
+function chip(t,x,y,col){const w=ctx.measureText(t).width+10;ctx.fillStyle='rgba(20,22,26,.85)';ctx.beginPath();ctx.roundRect(x-w/2,y-9,w,18,9);ctx.fill();ctx.fillStyle=col;ctx.fillText(t,x,y);}
 function hudBottom(){const h=document.getElementById('hud');return h.offsetTop+h.offsetHeight;}
 function biomeAt(x,z){if(!bdata)return '';const px=Math.floor((x-WORLD.x0)/WORLD.blocks_per_px),pz=Math.floor((z-WORLD.z0)/WORLD.blocks_per_px);if(px<0||pz<0||px>=bdata.width||pz>=bdata.height)return '';const i=(pz*bdata.width+px)*4,d=bdata.data;if(d[i+3]===0)return '';const hex='#'+[d[i],d[i+1],d[i+2]].map(v=>v.toString(16).padStart(2,'0')).join('');const b=BIOMES.find(b=>b.color===hex);return b?b.name:'';}
 function drawNether(p){
@@ -225,8 +240,10 @@ const tkey=document.getElementById('tkey');
 document.getElementById('btnTerrain').onclick=e=>{showTerrain=!showTerrain;e.target.classList.toggle('on',showTerrain);tkey.style.display=showTerrain?'block':'none';draw();};
 function showFrame(f){
   const S=f.size, cxm=f.x0+S/2, czm=f.z0+S/2; const st={have:'mapped at this level',partial:'partly mapped at this level',coarse:'only a coarser map here',none:'nothing mapped yet'}[f.status];
-  const sub=[`<div class="m"><b>x ${f.x0} … ${f.x0+S-1}</b> · <b>z ${f.z0} … ${f.z0+S-1}</b></div>`,
-    `<div class="m">centre ${cxm}, ${czm} · ${fromHome(cxm,czm)}</div>`,
+  const near=(a,b,h)=>Math.abs(a-h)<=Math.abs(b-h)?[a,b]:[b,a];
+  const [xa,xb]=near(f.x0,f.x0+S-1,HOME.x),[za,zb]=near(f.z0,f.z0+S-1,HOME.z);
+  const sub=[`<div class="m"><b>x ${xa} → ${xb}</b> (${xb>xa?'going east':'going west'}) · <b>z ${za} → ${zb}</b> (${zb>za?'going south':'going north'})</div>`,
+    `<div class="m">centre ${cxm}, ${czm} · ${fromHome(cxm,czm)}</div><div class="m">north = smaller z · east = larger x</div>`,
     `<span class="tag">${st}</span><span class="tag">${Math.round(f.explored*100)}% explored</span>${f.wall?`<span class="tag">${Math.round(f.wall*100)}% from wall photo</span>`:''}`,
     `<p>To make this map: stand anywhere inside those bounds, craft an empty map, then zoom it ${frameLevel} time${frameLevel>1?'s':''} (${frameLevel} more paper rings). Name it <b>L${frameLevel} ${f.name}</b>. ${f.status==='have'?'Already covered — only redo it for a sharper screenshot.':''}</p>`].join('');
   open(`<h3>L${frameLevel} ${f.name}</h3>${sub}`);
