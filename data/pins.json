@@ -216,14 +216,15 @@
   "biome": "Mountain peaks"
  },
  {
-  "name": "Longhorn cows (pen)",
-  "type": "mob",
-  "x": -3730,
+  "name": "Taiga village (west)",
+  "type": "village",
+  "x": -3745,
   "y": 66,
-  "z": -327,
-  "notes": "Fenced pen with longhorn cows, a pig and a composter — a village farm.",
+  "z": -357,
+  "notes": "Spruce village with villagers. The fenced pen with longhorn cows, a pig and a composter at (-3730, -327) is its farm.",
   "photos": [
-   "img/poi/longhorn-cows-in-a-pen/IMG_9370.jpg"
+   "img/poi/longhorn-cows-in-a-pen/IMG_9370.jpg",
+   "img/poi/taiga-village-west/24e8266b.jpg"
   ],
   "biome": "Taiga"
  },
@@ -488,5 +489,66 @@
    "img/poi/north-portal-2-snowy/934ff835.jpg"
   ],
   "biome": "Snowy taiga"
+ },
+ {
+  "name": "Pillager outpost (lake, west)",
+  "type": "outpost",
+  "biome": "Plains headland on the lake",
+  "x": -3437,
+  "y": 102,
+  "z": -822,
+  "notes": "Outpost tower on a headland over the water, west of the skeleton farm.",
+  "photos": [
+   "img/poi/pillager-outpost-lake-west/cd4df950.jpg"
+  ]
+ },
+ {
+  "name": "Cherry village",
+  "type": "village",
+  "biome": "Plains / cherry grove",
+  "x": -2950,
+  "y": 95,
+  "z": -917,
+  "notes": "Plains village with a bell, horses, cherry trees in view. ~700 blocks NW of Home.",
+  "photos": [
+   "img/poi/cherry-village/b9bb316a.jpg",
+   "img/poi/cherry-village/be8ebf79.jpg"
+  ]
+ },
+ {
+  "name": "Snowy outpost",
+  "type": "outpost",
+  "biome": "Meadow below snowy peaks",
+  "x": -2319,
+  "y": 117,
+  "z": -1913,
+  "notes": "Outpost in the flower meadow with snowy peaks behind. 90 blocks from the north village and ~300 from the snowy portal.",
+  "photos": [
+   "img/poi/snowy-outpost/69075cd1.jpg"
+  ]
+ },
+ {
+  "name": "North village",
+  "type": "village",
+  "biome": "Meadow / spruce",
+  "x": -2409,
+  "y": 111,
+  "z": -2018,
+  "notes": "Village with a meeting-point tree and lanterns, next to the snowy outpost. Nearest village to the snowy portal.",
+  "photos": [
+   "img/poi/north-village/86aab182.jpg"
+  ]
+ },
+ {
+  "name": "Home portal",
+  "type": "portal",
+  "biome": "Cherry grove",
+  "x": -2514,
+  "y": 63,
+  "z": -348,
+  "notes": "The Nether portal near Home, under the cherry trees with lanterns. Nether side at (-307, 61, -31).",
+  "photos": [
+   "img/poi/home-portal/fafab897.jpg"
+  ]
  }
 ]
