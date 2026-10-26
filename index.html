@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -64,7 +65,7 @@ canvas{display:block;image-rendering:pixelated}
 <div id="map"><canvas id="c"></canvas></div>
 <div id="hud">
   <div id="top">
-    <div id="brand" title="build 4">minemap</div>
+    <div id="brand" title="build 5">minemap</div>
     <div id="coords">tap the map for coordinates</div>
     <button class="pill icon" id="btnHome" title="Center on Home">⌂</button>
     <button class="pill" id="btnPins">Pins</button>
@@ -262,6 +263,9 @@ const key=document.getElementById('key'); key.innerHTML=BIOMES.map(b=>`<div><i s
 document.getElementById('btnBiomes').onclick=e=>{showBiomes=!showBiomes;e.target.classList.toggle('on',showBiomes);key.style.display=showBiomes?'block':'none';draw();};
 document.getElementById('btnSlime').onclick=e=>{showSlime=!showSlime;e.target.classList.toggle('on',showSlime);draw();};
 img.onload=draw; resize();
+// self-update: if GitHub Pages has a newer index.html than the one the home-screen app cached, reload once
+const BUILD=document.getElementById('brand').title;
+fetch('index.html?v='+Date.now(),{cache:'no-store'}).then(r=>r.text()).then(t=>{const m=t.match(/title="(build \d+)"/);if(m&&m[1]!==BUILD&&!sessionStorage.getItem('reloaded')){sessionStorage.setItem('reloaded','1');location.reload(true);}}).catch(()=>{});
 </script>
 </body>
 </html>
