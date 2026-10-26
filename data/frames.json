@@ -276,9 +276,9 @@
 "z0": -576,
 "size": 512,
 "explored": 1.0,
-"fine": 0.0,
+"fine": 0.89,
 "wall": 0.0,
-"status": "coarse"
+"status": "have"
 },
 {
 "name": "E1",

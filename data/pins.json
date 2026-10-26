@@ -550,5 +550,17 @@
   "photos": [
    "img/poi/home-portal/fafab897.jpg"
   ]
+ },
+ {
+  "name": "Spider spawner (dig down)",
+  "type": "spawner",
+  "biome": "Lake, east of Home",
+  "x": -2295,
+  "y": 62,
+  "z": -402,
+  "notes": "Bamboo scaffold tower marks the spot — dig straight down from here to reach a spider spawner. 135 blocks E of Home across the water.",
+  "photos": [
+   "img/poi/spider-spawner-dig-down/9cda879a.jpg"
+  ]
  }
 ]
