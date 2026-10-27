@@ -601,15 +601,15 @@
   ]
  },
  {
-  "name": "Spider spawner (north)",
-  "type": "spawner",
-  "biome": "Spruce slope near snow",
+  "name": "Spruce slope (north)",
+  "type": "biome",
+  "biome": "Snowy taiga edge / spruce slope",
   "x": -2195,
   "y": 110,
   "z": -2012,
-  "notes": "Cave spider seen at the surface here, below the snowy outpost — a spawner is likely close by. Pumpkins nearby.",
+  "notes": "Spruce and snow slope below the snowy outpost, pumpkins growing nearby.",
   "photos": [
-   "img/poi/spider-spawner-north/22b28cc8.jpg"
+   "img/poi/spruce-slope-north/22b28cc8.jpg"
   ]
  },
  {
