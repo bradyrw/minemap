@@ -244,12 +244,6 @@ function photosHtml(p){return p.photos&&p.photos.length?`<div class="photos">${p
 function wirePhotos(p){body.querySelectorAll('.photos img').forEach(img=>img.onclick=()=>openLb(p,+img.dataset.i));}
 function showPin(p){open(`<h3>${p.name}</h3><div class="m"><b>${p.x}, ${p.z}</b>${p.y!=null?' · y '+p.y:''} · ${fromHome(p.x,p.z)}</div>${tagHtml(p)}${p.notes?`<p>${p.notes}</p>`:''}${photosHtml(p)}`);wirePhotos(p);cx=p.x;cz=p.z;draw();}
 const lb=document.getElementById('lb'),lbimg=document.getElementById('lbimg'),lbcap=document.getElementById('lbcap');let lbp=null,lbi=0;
-function openLb(p,i){lbp=p;lbi=i;lbReset();lbimg.src=p.photos[i];lbcap.textContent=`${p.name} · ${i+1}/${p.photos.length}`;lb.style.display='flex';}
-document.getElementById('lbClose').addEventListener('pointerdown',e=>e.stopPropagation());document.getElementById('lbClose').onclick=e=>{e.stopPropagation();lb.style.display='none';lbReset();};
-function lbStep(d){if(!lbp)return;lbi=(lbi+d+lbp.photos.length)%lbp.photos.length;openLb(lbp,lbi);}
-for(const b of lb.querySelectorAll('.nav')){b.addEventListener('pointerdown',e=>e.stopPropagation());b.addEventListener('pointerup',e=>e.stopPropagation());}
-lb.querySelector('.nav.l').onclick=e=>{e.stopPropagation();lbStep(-1);};lb.querySelector('.nav.r').onclick=e=>{e.stopPropagation();lbStep(1);};
-
 // pinch zoom / pan inside the lightbox
 let lz={s:1,x:0,y:0},lp=new Map(),lstart=null,lpd=0,lmoved=false;
 function lbApply(){lbimg.style.transform=`translate(${lz.x}px,${lz.y}px) scale(${lz.s})`;}
@@ -262,12 +256,24 @@ lb.addEventListener('pointermove',e=>{if(!lp.has(e.pointerId))return;lp.set(e.po
   else if(lp.size===2){lmoved=true;const [a,b]=[...lp.values()];const d=Math.hypot(a[0]-b[0],a[1]-b[1]);const f=d/lpd;lpd=d;
     const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2;const r=lbimg.getBoundingClientRect();const ox=mx-r.left,oy=my-r.top;
     const ns=Math.min(6,Math.max(1,lz.s*f));const k=ns/lz.s;lz.x=mx-(mx-lz.x)*k;lz.y=my-(my-lz.y)*k;lz.s=ns;if(lz.s===1){lz.x=0;lz.y=0;}lbApply();}});
+let lastTap=0,tapTimer=null;
+function lbZoomAt(mx,my,ns){const k=ns/lz.s;lz.x=mx-(mx-lz.x)*k;lz.y=my-(my-lz.y)*k;lz.s=ns;if(lz.s<=1){lz={s:1,x:0,y:0};}lbApply();}
 function lbUp(e){const was=lp.size;lp.delete(e.pointerId);
-  if(was===1&&lstart){const dx=e.clientX-lstart[0];if(lz.s===1&&Math.abs(dx)>40){lbStep(dx<0?1:-1);}else if(!lmoved){lb.style.display='none';lbReset();}}
+  if(was===1&&lstart){const dx=e.clientX-lstart[0];
+    if(lz.s===1&&Math.abs(dx)>40){lbStep(dx<0?1:-1);}
+    else if(!lmoved){const now=Date.now();
+      if(now-lastTap<320){clearTimeout(tapTimer);tapTimer=null;lastTap=0;if(lz.s>1)lbReset();else lbZoomAt(e.clientX,e.clientY,2.5);}
+      else{lastTap=now;tapTimer=setTimeout(()=>{tapTimer=null;if(lz.s===1){lb.style.display='none';lbReset();}},320);}}}
   if(lp.size===0)lstart=null;}
 lb.addEventListener('pointerup',lbUp);lb.addEventListener('pointercancel',lbUp);
-lb.addEventListener('dblclick',e=>{if(lz.s>1){lbReset();}else{const mx=e.clientX,my=e.clientY;lz={s:2.5,x:mx-(mx)*2.5,y:my-(my)*2.5};lbApply();}});
 lb.addEventListener('wheel',e=>{e.preventDefault();const f=Math.exp(-e.deltaY*0.002);const ns=Math.min(6,Math.max(1,lz.s*f));const k=ns/lz.s;lz.x=e.clientX-(e.clientX-lz.x)*k;lz.y=e.clientY-(e.clientY-lz.y)*k;lz.s=ns;if(lz.s===1){lz.x=0;lz.y=0;}lbApply();},{passive:false});
+function openLb(p,i){lbp=p;lbi=i;lbReset();lbimg.src=p.photos[i];lbcap.textContent=`${p.name} · ${i+1}/${p.photos.length}`;lb.style.display='flex';}
+document.getElementById('lbClose').addEventListener('pointerdown',e=>e.stopPropagation());document.getElementById('lbClose').onclick=e=>{e.stopPropagation();lb.style.display='none';lbReset();};
+function lbStep(d){if(!lbp)return;lbi=(lbi+d+lbp.photos.length)%lbp.photos.length;openLb(lbp,lbi);}
+for(const b of lb.querySelectorAll('.nav')){b.addEventListener('pointerdown',e=>e.stopPropagation());b.addEventListener('pointerup',e=>e.stopPropagation());}
+lb.querySelector('.nav.l').onclick=e=>{e.stopPropagation();lbStep(-1);};lb.querySelector('.nav.r').onclick=e=>{e.stopPropagation();lbStep(1);};
+
+
 function showRoute(r){const a=r.points[0],b=r.points[r.points.length-1];const L=Math.round(r.points.slice(1).reduce((s,p,i)=>s+Math.hypot(p[0]-r.points[i][0],p[1]-r.points[i][1]),0));
   const dx=b[0]-a[0],dz=b[1]-a[1];const dirs=['N','NE','E','SE','S','SW','W','NW'];const dir=dirs[Math.round(((Math.atan2(dx,-dz)/(Math.PI*2))*8+8))%8];
   open(`<h3>${r.name}</h3><div class="m">Nether <b>${a[0]}, ${a[1]}</b> → <b>${b[0]}, ${b[1]}</b> · y ${r.y}<br>${L} Nether blocks heading ${dir} (= ${L*8} Overworld)</div><span class="tag">${r.status==='dug'?'dug':'planned'}</span><span class="tag">Nether</span>${r.notes?`<p>${r.notes}</p>`:''}`);}
