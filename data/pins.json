@@ -522,9 +522,10 @@
   "x": -2319,
   "y": 117,
   "z": -1913,
-  "notes": "Outpost in the flower meadow with snowy peaks behind. 90 blocks from the north village and ~300 from the snowy portal.",
+  "notes": "Outpost in the flower meadow with snowy peaks behind, 90 blocks from the north village and ~300 from the snowy portal. Pillagers with crossbows.",
   "photos": [
-   "img/poi/snowy-outpost/69075cd1.jpg"
+   "img/poi/snowy-outpost/69075cd1.jpg",
+   "img/poi/snowy-outpost/647eaac9.jpg"
   ]
  },
  {
@@ -561,6 +562,90 @@
   "notes": "Bamboo scaffold tower marks the spot — dig straight down from here to reach a spider spawner. 135 blocks E of Home across the water.",
   "photos": [
    "img/poi/spider-spawner-dig-down/9cda879a.jpg"
+  ]
+ },
+ {
+  "name": "NW village",
+  "type": "village",
+  "biome": "Plains / spruce edge",
+  "x": -3059,
+  "y": 69,
+  "z": -2152,
+  "notes": "Plains village with villagers, at the far NW corner of the Home L4. ~1,800 blocks NW of Home.",
+  "photos": [
+   "img/poi/nw-village/d44f5c20.jpg"
+  ]
+ },
+ {
+  "name": "Woodland tent (north)",
+  "type": "tent",
+  "biome": "Forest, by cherry trees",
+  "x": -2832,
+  "y": 63,
+  "z": -2064,
+  "notes": "Canvas tent with a chest and a small garden, cherry blossoms nearby.",
+  "photos": [
+   "img/poi/woodland-tent-north/56ba6031.jpg"
+  ]
+ },
+ {
+  "name": "Floating rock",
+  "type": "landmark",
+  "biome": "Meadow / stony peaks",
+  "x": -2343,
+  "y": 117,
+  "z": -1667,
+  "notes": "Big floating stone island over a flowery valley with a stream — a natural oddity, easy to spot from the air.",
+  "photos": [
+   "img/poi/floating-rock/a436c7fa.jpg"
+  ]
+ },
+ {
+  "name": "Spider spawner (north)",
+  "type": "spawner",
+  "biome": "Spruce slope near snow",
+  "x": -2195,
+  "y": 110,
+  "z": -2012,
+  "notes": "Cave spider seen at the surface here, below the snowy outpost — a spawner is likely close by. Pumpkins nearby.",
+  "photos": [
+   "img/poi/spider-spawner-north/22b28cc8.jpg"
+  ]
+ },
+ {
+  "name": "Mountain cave (lush)",
+  "type": "cave",
+  "biome": "Snowy / stony peak, lush cave inside",
+  "x": -2314,
+  "y": 143,
+  "z": -1247,
+  "notes": "Cave in the mountain at y 143 with lush-cave vines and glow berries — a good lush cave for axolotls and berries.",
+  "photos": [
+   "img/poi/mountain-cave-lush/3ee4ba1c.jpg"
+  ]
+ },
+ {
+  "name": "Cave mouth (birch)",
+  "type": "cave",
+  "biome": "Birch forest",
+  "x": -2237,
+  "y": 100,
+  "z": -1510,
+  "notes": "Big dark cave opening in the hillside among birch trees.",
+  "photos": [
+   "img/poi/cave-mouth-birch/fc3bffed.jpg"
+  ]
+ },
+ {
+  "name": "Birch forest",
+  "type": "biome",
+  "biome": "Birch forest",
+  "x": -2168,
+  "y": 94,
+  "z": -1467,
+  "notes": "Tall birch forest north of the wall — birch logs if you need them.",
+  "photos": [
+   "img/poi/birch-forest/5288da9a.jpg"
   ]
  }
 ]

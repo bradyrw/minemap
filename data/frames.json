@@ -15,30 +15,30 @@
 "x0": -3648,
 "z0": -2112,
 "size": 512,
-"explored": 0.58,
-"fine": 0.0,
+"explored": 0.93,
+"fine": 0.89,
 "wall": 0.0,
-"status": "coarse"
+"status": "have"
 },
 {
 "name": "N3W1",
 "x0": -3136,
 "z0": -2112,
 "size": 512,
-"explored": 0.59,
-"fine": 0.0,
+"explored": 0.93,
+"fine": 0.89,
 "wall": 0.0,
-"status": "coarse"
+"status": "have"
 },
 {
 "name": "N3",
 "x0": -2624,
 "z0": -2112,
 "size": 512,
-"explored": 0.86,
-"fine": 0.0,
+"explored": 0.94,
+"fine": 0.89,
 "wall": 0.0,
-"status": "coarse"
+"status": "have"
 },
 {
 "name": "N3E1",
@@ -116,9 +116,9 @@
 "z0": -1600,
 "size": 512,
 "explored": 1.0,
-"fine": 0.0,
+"fine": 0.89,
 "wall": 0.0,
-"status": "coarse"
+"status": "have"
 },
 {
 "name": "N2E1",
@@ -487,20 +487,20 @@
 "x0": -4160,
 "z0": -2112,
 "size": 1024,
-"explored": 0.86,
-"fine": 0.0,
+"explored": 0.95,
+"fine": 0.22,
 "wall": 0.0,
-"status": "coarse"
+"status": "partial"
 },
 {
 "name": "N1",
 "x0": -3136,
 "z0": -2112,
 "size": 1024,
-"explored": 0.86,
-"fine": 0.0,
+"explored": 0.96,
+"fine": 0.67,
 "wall": 0.0,
-"status": "coarse"
+"status": "have"
 },
 {
 "name": "N1E1",
@@ -609,8 +609,8 @@
 "x0": -4160,
 "z0": -2112,
 "size": 2048,
-"explored": 0.93,
-"fine": 0.93,
+"explored": 0.98,
+"fine": 0.98,
 "wall": 0.0,
 "status": "have"
 },
