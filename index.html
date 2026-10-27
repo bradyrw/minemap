@@ -52,8 +52,8 @@ canvas{display:block;image-rendering:pixelated}
 .photos{display:flex;gap:6px;overflow-x:auto;margin:12px -16px 0;padding:0 16px 4px;scrollbar-width:none}
 .photos::-webkit-scrollbar{display:none}
 .photos img{height:96px;border-radius:10px;flex:none;cursor:pointer;border:1px solid var(--line)}
-#lb{position:fixed;inset:0;background:#000;display:none;z-index:10;align-items:center;justify-content:center;touch-action:pan-x}
-#lb img{max-width:100%;max-height:100%;object-fit:contain}
+#lb{position:fixed;inset:0;background:#000;display:none;z-index:10;align-items:center;justify-content:center;touch-action:none;overflow:hidden}
+#lb img{max-width:100%;max-height:100%;object-fit:contain;transform-origin:0 0;will-change:transform;user-select:none;-webkit-user-select:none;-webkit-user-drag:none}
 #lb .nav{position:absolute;top:50%;transform:translateY(-50%);background:#0009;color:#fff;border:0;font-size:26px;width:44px;height:44px;border-radius:50%}
 #lb .nav.l{left:10px}#lb .nav.r{right:10px}
 #lb .cap{position:absolute;bottom:calc(14px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;color:#bbb;font-size:13px}
@@ -70,7 +70,7 @@ canvas{display:block;image-rendering:pixelated}
 <div id="map"><canvas id="c"></canvas></div>
 <div id="hud">
   <div id="top">
-    <div id="brand" title="build 5">minemap</div>
+    <div id="brand" title="build 6">minemap</div>
     <div id="coords">tap the map for coordinates</div>
     <button class="pill icon" id="btnHome" title="Center on Home">⌂</button>
     <button class="pill" id="btnPins">Pins</button>
@@ -86,7 +86,7 @@ canvas{display:block;image-rendering:pixelated}
 <div id="key"></div>
 <div id="tkey"><div><i style="background:#ff3030;opacity:.75"></i>rough / steep open ground</div><div><i style="background:repeating-linear-gradient(45deg,#2c8a2c 0 2px,transparent 2px 5px)"></i>tree canopy (terrain hidden)</div><div style="color:var(--muted)">streaks = slope shading, exaggerated</div></div>
 <div id="toast"></div>
-<div id="lb"><button class="nav l">‹</button><img id="lbimg"><button class="nav r">›</button><div class="cap" id="lbcap"></div></div>
+<div id="lb"><button class="nav l">‹</button><img id="lbimg"><button class="nav r">›</button><div class="cap" id="lbcap"></div><button class="close" style="top:calc(12px + env(safe-area-inset-top,0px))" id="lbClose">✕</button></div>
 <div id="sheet"><button class="close" id="btnClose">✕</button><div id="sheetBody"></div></div>
 <script type="module">
 const WORLD = {"x0": -4160, "z0": -2112, "blocks_per_px": 4, "w": 1024, "h": 768};      // {x0,z0,blocks_per_px,w,h}
@@ -244,11 +244,30 @@ function photosHtml(p){return p.photos&&p.photos.length?`<div class="photos">${p
 function wirePhotos(p){body.querySelectorAll('.photos img').forEach(img=>img.onclick=()=>openLb(p,+img.dataset.i));}
 function showPin(p){open(`<h3>${p.name}</h3><div class="m"><b>${p.x}, ${p.z}</b>${p.y!=null?' · y '+p.y:''} · ${fromHome(p.x,p.z)}</div>${tagHtml(p)}${p.notes?`<p>${p.notes}</p>`:''}${photosHtml(p)}`);wirePhotos(p);cx=p.x;cz=p.z;draw();}
 const lb=document.getElementById('lb'),lbimg=document.getElementById('lbimg'),lbcap=document.getElementById('lbcap');let lbp=null,lbi=0;
-function openLb(p,i){lbp=p;lbi=i;lbimg.src=p.photos[i];lbcap.textContent=`${p.name} · ${i+1}/${p.photos.length}`;lb.style.display='flex';}
+function openLb(p,i){lbp=p;lbi=i;lbReset();lbimg.src=p.photos[i];lbcap.textContent=`${p.name} · ${i+1}/${p.photos.length}`;lb.style.display='flex';}
+document.getElementById('lbClose').addEventListener('pointerdown',e=>e.stopPropagation());document.getElementById('lbClose').onclick=e=>{e.stopPropagation();lb.style.display='none';lbReset();};
 function lbStep(d){if(!lbp)return;lbi=(lbi+d+lbp.photos.length)%lbp.photos.length;openLb(lbp,lbi);}
+for(const b of lb.querySelectorAll('.nav')){b.addEventListener('pointerdown',e=>e.stopPropagation());b.addEventListener('pointerup',e=>e.stopPropagation());}
 lb.querySelector('.nav.l').onclick=e=>{e.stopPropagation();lbStep(-1);};lb.querySelector('.nav.r').onclick=e=>{e.stopPropagation();lbStep(1);};
-lb.onclick=()=>lb.style.display='none';
-let lbx=null;lb.addEventListener('pointerdown',e=>lbx=e.clientX);lb.addEventListener('pointerup',e=>{if(lbx!=null&&Math.abs(e.clientX-lbx)>40){lbStep(e.clientX<lbx?1:-1);setTimeout(()=>lb.style.display='flex',0);}lbx=null;});
+
+// pinch zoom / pan inside the lightbox
+let lz={s:1,x:0,y:0},lp=new Map(),lstart=null,lpd=0,lmoved=false;
+function lbApply(){lbimg.style.transform=`translate(${lz.x}px,${lz.y}px) scale(${lz.s})`;}
+function lbReset(){lz={s:1,x:0,y:0};lbApply();}
+lb.addEventListener('pointerdown',e=>{lb.setPointerCapture(e.pointerId);lp.set(e.pointerId,[e.clientX,e.clientY]);lmoved=false;
+  if(lp.size===1)lstart=[e.clientX,e.clientY,lz.x,lz.y];
+  if(lp.size===2){const [a,b]=[...lp.values()];lpd=Math.hypot(a[0]-b[0],a[1]-b[1]);}});
+lb.addEventListener('pointermove',e=>{if(!lp.has(e.pointerId))return;lp.set(e.pointerId,[e.clientX,e.clientY]);
+  if(lp.size===1&&lstart){const dx=e.clientX-lstart[0],dy=e.clientY-lstart[1];if(Math.abs(dx)+Math.abs(dy)>4)lmoved=true;if(lz.s>1){lz.x=lstart[2]+dx;lz.y=lstart[3]+dy;lbApply();}}
+  else if(lp.size===2){lmoved=true;const [a,b]=[...lp.values()];const d=Math.hypot(a[0]-b[0],a[1]-b[1]);const f=d/lpd;lpd=d;
+    const mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2;const r=lbimg.getBoundingClientRect();const ox=mx-r.left,oy=my-r.top;
+    const ns=Math.min(6,Math.max(1,lz.s*f));const k=ns/lz.s;lz.x=mx-(mx-lz.x)*k;lz.y=my-(my-lz.y)*k;lz.s=ns;if(lz.s===1){lz.x=0;lz.y=0;}lbApply();}});
+function lbUp(e){const was=lp.size;lp.delete(e.pointerId);
+  if(was===1&&lstart){const dx=e.clientX-lstart[0];if(lz.s===1&&Math.abs(dx)>40){lbStep(dx<0?1:-1);}else if(!lmoved){lb.style.display='none';lbReset();}}
+  if(lp.size===0)lstart=null;}
+lb.addEventListener('pointerup',lbUp);lb.addEventListener('pointercancel',lbUp);
+lb.addEventListener('dblclick',e=>{if(lz.s>1){lbReset();}else{const mx=e.clientX,my=e.clientY;lz={s:2.5,x:mx-(mx)*2.5,y:my-(my)*2.5};lbApply();}});
+lb.addEventListener('wheel',e=>{e.preventDefault();const f=Math.exp(-e.deltaY*0.002);const ns=Math.min(6,Math.max(1,lz.s*f));const k=ns/lz.s;lz.x=e.clientX-(e.clientX-lz.x)*k;lz.y=e.clientY-(e.clientY-lz.y)*k;lz.s=ns;if(lz.s===1){lz.x=0;lz.y=0;}lbApply();},{passive:false});
 function showRoute(r){const a=r.points[0],b=r.points[r.points.length-1];const L=Math.round(r.points.slice(1).reduce((s,p,i)=>s+Math.hypot(p[0]-r.points[i][0],p[1]-r.points[i][1]),0));
   const dx=b[0]-a[0],dz=b[1]-a[1];const dirs=['N','NE','E','SE','S','SW','W','NW'];const dir=dirs[Math.round(((Math.atan2(dx,-dz)/(Math.PI*2))*8+8))%8];
   open(`<h3>${r.name}</h3><div class="m">Nether <b>${a[0]}, ${a[1]}</b> → <b>${b[0]}, ${b[1]}</b> · y ${r.y}<br>${L} Nether blocks heading ${dir} (= ${L*8} Overworld)</div><span class="tag">${r.status==='dug'?'dug':'planned'}</span><span class="tag">Nether</span>${r.notes?`<p>${r.notes}</p>`:''}`);}
