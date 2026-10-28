@@ -17,20 +17,120 @@
    "status": "dug"
   },
   {
-   "name": "To the North cabin portal",
+   "name": "West tunnel (y 112)",
+   "y": 112,
+   "points": [
+    [
+     -556,
+     -39
+    ],
+    [
+     -453,
+     -39
+    ]
+   ],
+   "notes": "Long straight E-W tunnel at y 112 along z -39. Torches at the far ends.",
+   "status": "dug"
+  },
+  {
+   "name": "Stairs down to y 100",
+   "y": 100,
+   "points": [
+    [
+     -453,
+     -39
+    ],
+    [
+     -440,
+     -39
+    ]
+   ],
+   "notes": "Steps down from the y-112 tunnel to y 100 at the x -440 corner. A y-100 tunnel continues east.",
+   "status": "dug"
+  },
+  {
+   "name": "East tunnel (y 100)",
+   "y": 100,
+   "points": [
+    [
+     -441,
+     -40
+    ],
+    [
+     -340,
+     -40
+    ]
+   ],
+   "notes": "Straight y-100 tunnel along z -40 from x -441 to -340 with torches; a skeleton wandered in once.",
+   "status": "dug"
+  },
+  {
+   "name": "Stairs up to y 121",
    "y": 121,
    "points": [
     [
-     -307,
-     -31
+     -340,
+     -40
     ],
     [
-     -22,
-     -218
+     -318,
+     -40
     ]
    ],
-   "notes": "Planned: ~340 blocks. Connects the Home portal to the North cabin portal; the lava crossing may already bridge part of it.",
-   "status": "planned"
+   "notes": "Steps up from y 100 to y 121 at the x -318 end; the ceiling here is bedrock.",
+   "status": "dug"
+  },
+  {
+   "name": "Home link (y 121)",
+   "y": 121,
+   "points": [
+    [
+     -319,
+     -40
+    ],
+    [
+     -303,
+     -40
+    ],
+    [
+     -307,
+     -31
+    ]
+   ],
+   "notes": "Short y-121 link to the Home portal's tunnel head at (-307, -31).",
+   "status": "dug"
+  },
+  {
+   "name": "Shaft down to the lava cavern",
+   "y": 63,
+   "points": [
+    [
+     -319,
+     -40
+    ],
+    [
+     -319,
+     22
+    ]
+   ],
+   "notes": "Stairs/shaft from y 121 at (-319,-40) down to y 63 at (-319, 22): opens onto a crimson forest with a lava pool. Careful.",
+   "status": "dug"
+  },
+  {
+   "name": "Low tunnel (y 47)",
+   "y": 47,
+   "points": [
+    [
+     -303,
+     23
+    ],
+    [
+     -420,
+     15
+    ]
+   ],
+   "notes": "Deep y-47 tunnel heading west from (-303, 23) to the warped cavern at (-420, 15).",
+   "status": "dug"
   }
  ]
 }

@@ -48,5 +48,73 @@
   "photos": [
    "img/poi/cavern-lava-crossing/b9388fa2.jpg"
   ]
+ },
+ {
+  "name": "West tunnel end",
+  "type": "landmark",
+  "biome": "Nether wastes",
+  "x": -556,
+  "y": 112,
+  "z": -39,
+  "notes": "Western end of the y-112 tunnel.",
+  "photos": [
+   "img/poi/west-tunnel-end/1d05bc1c.jpg"
+  ]
+ },
+ {
+  "name": "Corner: stairs to y 100",
+  "type": "landmark",
+  "biome": "Nether wastes",
+  "x": -440,
+  "y": 100,
+  "z": -39,
+  "notes": "Where the y-112 tunnel steps down to y 100 and continues east.",
+  "photos": [
+   "img/poi/corner-stairs-to-y-100/50913460.jpg",
+   "img/poi/corner-stairs-to-y-100/8b4849e7.jpg",
+   "img/poi/corner-stairs-to-y-100/24acbab8.jpg",
+   "img/poi/corner-stairs-to-y-100/a847b045.jpg"
+  ]
+ },
+ {
+  "name": "Corner: stairs to y 121",
+  "type": "landmark",
+  "biome": "Nether wastes (bedrock ceiling)",
+  "x": -318,
+  "y": 121,
+  "z": -40,
+  "notes": "Top of the stairs from y 100; bedrock overhead. Home portal tunnel head is 20 blocks east.",
+  "photos": [
+   "img/poi/corner-stairs-to-y-121/c84df603.jpg",
+   "img/poi/corner-stairs-to-y-121/910c46a3.jpg",
+   "img/poi/corner-stairs-to-y-121/e5049bdc.jpg",
+   "img/poi/corner-stairs-to-y-121/592e7104.jpg"
+  ]
+ },
+ {
+  "name": "Lava cavern (crimson)",
+  "type": "landmark",
+  "biome": "Crimson forest, lava pool",
+  "x": -319,
+  "y": 63,
+  "z": 22,
+  "notes": "Bottom of the shaft from (-319,-40): crimson forest and a big lava pool. This is where the lava fall happened — dangerous.",
+  "photos": [
+   "img/poi/lava-cavern-crimson/4aa22870.jpg",
+   "img/poi/lava-cavern-crimson/6ba833e9.jpg"
+  ]
+ },
+ {
+  "name": "Warped cavern (west)",
+  "type": "landmark",
+  "biome": "Warped forest, soul-sand floor",
+  "x": -420,
+  "y": 48,
+  "z": 15,
+  "notes": "Big warped-forest cavern with a soul-sand floor at the end of the y-47 tunnel; skeletons and soul fire. Low health here — bring food.",
+  "photos": [
+   "img/poi/warped-cavern-west/e8f45a1b.jpg",
+   "img/poi/warped-cavern-west/4c5d1b50.jpg"
+  ]
  }
 ]
