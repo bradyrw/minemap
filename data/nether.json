@@ -116,5 +116,18 @@
    "img/poi/warped-cavern-west/e8f45a1b.jpg",
    "img/poi/warped-cavern-west/4c5d1b50.jpg"
   ]
+ },
+ {
+  "name": "BASALT DELTAS",
+  "type": "resource",
+  "biome": "Basalt deltas",
+  "x": -635,
+  "y": 104,
+  "z": -30,
+  "notes": "Found it. Basalt columns, blackstone and lava pools, ghasts about. Reached by extending the y-112 west tunnel to x -639 then a stair down to y 104. Dug-in safe spot here to open up for magma cubes (froglights). Overworld equivalent (-5080, -240).",
+  "photos": [
+   "img/poi/basalt-deltas/56f28bcf.jpg",
+   "img/poi/basalt-deltas/41dca9e8.jpg"
+  ]
  }
 ]

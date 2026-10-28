@@ -21,6 +21,10 @@
    "y": 112,
    "points": [
     [
+     -639,
+     -32
+    ],
+    [
      -556,
      -39
     ],
@@ -29,7 +33,7 @@
      -39
     ]
    ],
-   "notes": "Long straight E-W tunnel at y 112 along z -39. Torches at the far ends.",
+   "notes": "Long E-W tunnel along z -39 at y 112, extended west to the basalt deltas edge at x -639 (steps down to y 104 there).",
    "status": "dug"
   },
   {
