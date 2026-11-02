@@ -10,7 +10,7 @@ from scipy.sparse import coo_matrix
 from scipy.sparse.linalg import lsqr
 R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 w=cv2.imread(os.path.join(R,'img','world.png'),cv2.IMREAD_UNCHANGED); alpha=w[...,3]>0; bgr=w[...,:3].astype(np.float32)
-H,W=alpha.shape; X0,Z0=-4160,-2112
+H,W=alpha.shape; _wj=json.load(open(os.path.join(R,'data','world.json'))); X0,Z0=_wj['x0'],_wj['z0']
 hsv=cv2.cvtColor(w[...,:3],cv2.COLOR_BGR2HSV); hh,ss=hsv[...,0].astype(int),hsv[...,1].astype(int)
 water=((hh>95)&(hh<135)&(ss>80))&alpha; land=alpha&~water
 V=bgr.mean(2); chroma=bgr/np.maximum(bgr.sum(2,keepdims=True),1)

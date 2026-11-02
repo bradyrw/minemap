@@ -4,7 +4,7 @@ Brady's annotated Minecraft (Bedrock, iPhone) world map. Static site on GitHub P
 
 ## Layout
 - `index.html` — touch pan/zoom viewer. Tap = coords + direction from Home; Pins sheet has "Go to X,Z"; Grid = 512-block map frames.
-- `img/world.png` — stitched world, 4 blocks/px. Level-3 tiles fill in under missing level-2s; level-4 maps (`img/tiles/l4_*.png`, 16 blocks/px, listed in `data/world.json` → `level4` with their frame origin in blocks) fill anything still empty. Image origin is (x0,z0) in world.json; the 8×4 level-2 wall sits at z −1088 inside it.
+- `img/world.png` — stitched world, 4 blocks/px. Level-3 tiles fill in under missing level-2s; level-4 maps (`img/tiles/l4_*.png`, 16 blocks/px, listed in `data/world.json` → `level4` with their frame origin in blocks) fill anything still empty. Image origin is (x0,z0) in world.json (now x −6208, z −2112; 1536×768 px); the 8×4 level-2 wall sits at x −4160, z −1088 inside it. assign.json wall indices can be negative for frames west/north of the wall.
 - `data/world.json` — world image placement (`x0`,`z0`, blocks per px) and which screenshot sits in which frame.
 - `data/nether_routes.json` — Nether tunnels as polylines in Nether coords (`status` dug/planned); drawn ×8 over the Overworld. Nether button cycles off → pins+tunnels → same with the Overworld dimmed and a 128-Nether-block grid.
 - `data/nether.json` — Nether pins `{name,type,x,y,z,notes}` in NETHER coordinates; the viewer's Nether toggle draws them at ×8 on the Overworld map and adds Nether coords to the tap readout.

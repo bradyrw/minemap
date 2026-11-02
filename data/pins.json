@@ -647,5 +647,25 @@
   "photos": [
    "img/poi/birch-forest/5288da9a.jpg"
   ]
+ },
+ {
+  "name": "West portal (basalt)",
+  "type": "portal",
+  "biome": "Snowy slopes / spruce",
+  "x": -5186,
+  "y": 116,
+  "z": -234,
+  "notes": "Overworld end of the basalt-deltas portal. Cold biome on snow among spruce — green frogs if raised here. Nether side at (-649, 85, -29), right by the deltas. Powder snow patches on the slopes above.",
+  "photos": []
+ },
+ {
+  "name": "Crevasse (gear recovered)",
+  "type": "landmark",
+  "biome": "Snowy slopes",
+  "x": -5142,
+  "y": 95,
+  "z": -250,
+  "notes": "Deep crack ENE of the west portal, ~35 blocks rim to floor. Fell in here once; gear recovered. Avoid.",
+  "photos": []
  }
 ]

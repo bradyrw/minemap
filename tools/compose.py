@@ -2,8 +2,9 @@
 import cv2, numpy as np, json, os
 R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 T=os.path.join(R,'img','tiles'); D=os.path.join(R,'data')
-X0,Z0=-4160,-2112   # world image top-left in blocks; 4 blocks per px
-W,H=1024,768
+X0,Z0=-6208,-2112   # world image top-left in blocks; 4 blocks per px
+W,H=1536,768
+WX=(-4160-X0)//4    # the level-2 wall grid starts at x -4160
 WALL_Z=-1088        # the 8x4 level-2 wall starts here; wall frame (fx,fy) -> px (fx*128, (WALL_Z-Z0)//4 + fy*128)
 canvas=np.zeros((H,W,4),np.uint8)
 src=np.zeros((H,W),np.uint8)   # 2/3/4 = map level the pixel came from, 9 = wall photo fill
@@ -36,17 +37,17 @@ for n,(fx,fy) in world['level3'].items():
     m=cv2.erode(m.astype(np.uint8),np.ones((5,5),np.uint8)).astype(bool)  # trim ragged edge
     if n!='9484': m[:]=True
     else: m[200:]=False
-    put(up,fx*128,OY+fy*128,m,3)
+    put(up,WX+fx*128,OY+fy*128,m,3)
 l2=json.load(open(os.path.join(D,'assign.json')))
 for n,(fx,fy) in l2.items():
     t=cv2.imread(os.path.join(T,f'rect_IMG_{n}.png'))
-    put(t,fx*128,OY+fy*128,~hudmask(t),2)
+    put(t,WX+fx*128,OY+fy*128,~hudmask(t),2)
 # fill what the HUD covered (and anything else still empty) from the flattened wall photo, img/wall.png
 wp=os.path.join(R,'img','wall.png')
 if os.path.exists(wp):
     w=cv2.imread(wp,cv2.IMREAD_UNCHANGED)
-    if w.shape[0]!=H:   # wall.png is wall-sized (1024x512); pad to world
-        full=np.zeros((H,W,4),np.uint8); full[OY:OY+w.shape[0],:w.shape[1]]=w; w=full
+    if w.shape[0]!=H or w.shape[1]!=W:   # wall.png is wall-sized (1024x512); pad to world
+        full=np.zeros((H,W,4),np.uint8); full[OY:OY+w.shape[0],WX:WX+w.shape[1]]=w; w=full
     hole=(canvas[...,3]==0)&(w[...,3]>0)
     canvas[hole]=np.concatenate([w[hole][:,:3],np.full((hole.sum(),1),255,np.uint8)],1); src[hole]=9
 # level-4 maps last, 16 blocks/px upscaled 4x, only where nothing better exists
