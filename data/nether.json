@@ -129,5 +129,19 @@
    "img/poi/basalt-deltas/56f28bcf.jpg",
    "img/poi/basalt-deltas/41dca9e8.jpg"
   ]
+ },
+ {
+  "name": "NETHER FORTRESS + blaze spawner",
+  "type": "spawner",
+  "biome": "Warped forest / lava sea",
+  "x": -1689,
+  "y": 76,
+  "z": -194,
+  "notes": "Found in the seed copy. Fortress at about (-1700, 74, -193); blaze spawner at (-1689, 76, -194) on the fortress's upper walkway. Wither skeletons and blazes. Overworld equivalent (-13,500, -1,550) — far west, so the approach is via the Nether highway. Not yet reached in the realm.",
+  "photos": [
+   "img/poi/nether-fortress-blaze-spawner/155d2fb1.jpg",
+   "img/poi/nether-fortress-blaze-spawner/a0eeab3d.jpg",
+   "img/poi/nether-fortress-blaze-spawner/0be2f50a.jpg"
+  ]
  }
 ]

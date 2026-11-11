@@ -135,6 +135,30 @@
    ],
    "notes": "Deep y-47 tunnel heading west from (-303, 23) to the warped cavern at (-420, 15).",
    "status": "dug"
+  },
+  {
+   "name": "To the fortress (planned)",
+   "y": 111,
+   "points": [
+    [
+     -649,
+     -29
+    ],
+    [
+     -1706,
+     -29
+    ],
+    [
+     -1706,
+     -223
+    ],
+    [
+     -1730,
+     -223
+    ]
+   ],
+   "notes": "From the basalt portal west along z -29 at y 111 to x -1706 (~1,060 blocks), then north to z -223, then the copy's staircase down at (-1706, 80..111, -214..-223) to the fortress at y 74.",
+   "status": "planned"
   }
  ]
 }
